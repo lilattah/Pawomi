@@ -205,3 +205,11 @@ section:has(> .promo-adventure){position:relative;isolation:isolate}
  .promo-floating-assets .promo-decor-2{width:52px;max-width:52px;top:62%;left:auto;right:29%}
  .promo-floating-assets .promo-decor-3{width:48px;max-width:48px;top:43%;right:auto;left:5%}
 }
+
+/* Final position tuning for upper heart and black accent */
+.promo-floating-assets .promo-decor-3{top:5%;left:43%;right:auto;width:65px;max-width:65px;transform:rotate(-12deg)}
+.promo-floating-assets .promo-decor-2{top:17%;right:23%;left:auto;width:78px;max-width:78px;transform:rotate(8deg)}
+@media(max-width:700px){
+ .promo-floating-assets .promo-decor-3{top:47%;left:8%;right:auto;width:48px;max-width:48px}
+ .promo-floating-assets .promo-decor-2{top:63%;right:22%;left:auto;width:52px;max-width:52px}
+}
