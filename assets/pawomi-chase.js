@@ -127,7 +127,7 @@ function boot(){
     const frame=moving?Math.floor(a.phase)%6:0;
     const tile=a.frames[a.row]?.[frame];if(!tile)return;
     const originalCellWidth=tile.width/1.48;const drawW=size*(tile.width/originalCellWidth);const dh=drawW*(tile.height/tile.width),x=a.x*w,y=a.y*h;
-    ctx.fillStyle='rgba(80,0,0,.13)';ctx.beginPath();ctx.ellipse(x,y+dh*.32,size*.30,size*.055,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(80,0,0,.13)';ctx.beginPath();ctx.ellipse(x,y+dh*.22,size*.30,size*.055,0,0,Math.PI*2);ctx.fill();
     ctx.drawImage(tile,x-drawW/2,y-dh*.7,drawW,dh);
    });
    if(active)requestAnimationFrame(animate);
