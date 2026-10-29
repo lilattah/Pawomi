@@ -521,3 +521,24 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 @media(max-width:600px){
   .pawomi-story-banner .pawomi-story-illustration img.story-hills{bottom:-3%!important}
 }
+
+
+/* Story forest ground: natural aspect ratio, bleed past lower edge to eliminate transparent bottom gap */
+.pawomi-story-banner .pawomi-story-illustration img.story-hills{
+  top:auto!important;
+  left:0!important;
+  right:0!important;
+  bottom:-76px!important;
+  width:100%!important;
+  height:auto!important;
+  max-width:none!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+  transform-origin:center bottom!important;
+}
+@media(max-width:900px){
+  .pawomi-story-banner .pawomi-story-illustration img.story-hills{bottom:-64px!important}
+}
+@media(max-width:600px){
+  .pawomi-story-banner .pawomi-story-illustration img.story-hills{bottom:-42px!important}
+}
