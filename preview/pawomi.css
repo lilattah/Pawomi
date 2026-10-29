@@ -213,3 +213,22 @@ section:has(> .promo-adventure){position:relative;isolation:isolate}
  .promo-floating-assets .promo-decor-3{top:47%;left:8%;right:auto;width:48px;max-width:48px}
  .promo-floating-assets .promo-decor-2{top:63%;right:22%;left:auto;width:52px;max-width:52px}
 }
+
+
+/* Pawomi double editorial cards after story banner */
+.pawomi-duo-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.pawomi-duo-card{height:355px;border-radius:25px;position:relative;overflow:hidden;isolation:isolate}
+.pawomi-discount{background:#ffe08a}.pawomi-inspiration{background:#cdddac}
+.pawomi-duo-copy{position:relative;z-index:3;padding:34px 35px;max-width:75%}
+.pawomi-duo-copy h2{font-family:Georgia,serif;font-size:clamp(27px,3vw,46px);letter-spacing:-.045em;line-height:1.07;margin:0 0 18px;font-weight:900;color:#19120e}
+.pawomi-duo-copy p{font-size:clamp(13px,1.2vw,17px);line-height:1.5;margin:0 0 20px;max-width:335px}
+.pawomi-duo-form{display:flex;align-items:stretch;width:min(100%,390px);height:57px;border-radius:32px;overflow:hidden;background:#fff;box-shadow:0 0 0 1px #ffffff88}
+.pawomi-duo-form input{width:100%;min-width:0;flex:1;border:0;background:#fff;padding:0 16px;font:inherit;font-size:15px}
+.pawomi-duo-form button{flex:0 0 auto;border:0;border-radius:0;background:#cd071b;color:#fff;padding:0 23px;font:inherit;font-weight:700;cursor:pointer}
+.pawomi-duo-link{display:inline-flex;align-items:center;gap:20px;border-radius:35px;background:#fff8ed;padding:14px 25px;text-decoration:none;color:#19120e;font-weight:700}
+.pawomi-duo-dog{position:absolute;right:-7%;bottom:-12%;width:55%;height:102%;object-fit:contain;z-index:1}
+.pawomi-duo-pet{position:absolute;right:-5%;bottom:-17%;width:66%;height:92%;object-fit:contain;z-index:1}
+.pawomi-duo-heart{position:absolute;right:34%;top:13px;color:#d00922;font-size:62px;line-height:1;font-weight:900;z-index:2;transform:rotate(-14deg)}
+.pawomi-duo-butterfly{position:absolute;right:11%;top:11%;width:65px;height:65px;object-fit:contain;z-index:2}
+@media(max-width:850px){.pawomi-duo-grid{gap:14px}.pawomi-duo-card{height:330px}.pawomi-duo-copy{padding:25px;max-width:85%}.pawomi-duo-dog{right:-15%}.pawomi-duo-pet{right:-15%}}
+@media(max-width:650px){.pawomi-duo-grid{grid-template-columns:1fr;gap:16px}.pawomi-duo-card{height:340px}.pawomi-duo-copy{max-width:78%}.pawomi-duo-copy h2{font-size:34px}.pawomi-duo-copy p{font-size:14px}.pawomi-duo-form{width:100%;max-width:330px;height:48px}.pawomi-duo-form button{padding:0 16px}.pawomi-duo-dog{width:57%;right:-9%;bottom:-12%}.pawomi-duo-pet{width:69%;right:-12%;bottom:-15%}}
