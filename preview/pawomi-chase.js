@@ -19,51 +19,55 @@ function boot(){
   const cols=6,rows=4;
   function resize(){const rect=hero.getBoundingClientRect();w=Math.max(1,rect.width);h=Math.max(1,rect.height);dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
   function framesFromSheet(image){
-   // The uploaded source files already have real alpha transparency.
-   // Never recolor or filter black pixels: they are the character's outlines.
-   const sw=image.naturalWidth,sh=image.naturalHeight,output=[];
+   // Preserve source alpha and black outlines. Extract overlapping source
+   // regions; 6x4 grid boundaries are NOT valid character silhouette bounds.
+   const sw=image.naturalWidth,sh=image.naturalHeight,cw=sw/6,ch=sh/4;
+   const output=[];
    for(let row=0;row<4;row++){
     const frames=[];
     for(let col=0;col<6;col++){
-     const x0=Math.round(col*sw/6),x1=Math.round((col+1)*sw/6);
-     const y0=Math.round(row*sh/4),y1=Math.round((row+1)*sh/4);
-     const W=x1-x0,H=y1-y0,frame=document.createElement('canvas');
-     frame.width=W;frame.height=H;
-     const g=frame.getContext('2d',{willReadFrequently:true});
-     g.drawImage(image,x0,y0,W,H,0,0,W,H);
-     const sample=g.getImageData(0,0,W,H),data=sample.data,count=W*H;
-     const seen=new Uint8Array(count),labels=new Int32Array(count);
-     const queue=new Int32Array(count);
-     let selected=0,largest=0,component=0;
-     // Connected alpha components, not color classification. This keeps
-     // every black stroke INSIDE the dog/cat including eye and nose ink.
-     for(let i=0;i<count;i++){
-      if(seen[i]||data[i*4+3]<95)continue;
-      component++;let head=0,tail=1;queue[0]=i;seen[i]=1;labels[i]=component;
+     const centerX=(col+.5)*cw,centerY=(row+.5)*ch;
+     const W=Math.round(cw*1.48),H=Math.round(ch*1.28);
+     const sx=Math.round(centerX-W/2),sy=Math.round(centerY-H/2);
+     const tile=document.createElement('canvas');tile.width=W;tile.height=H;
+     const g=tile.getContext('2d',{willReadFrequently:true});
+     g.drawImage(image,sx,sy,W,H,0,0,W,H);
+     const pixels=g.getImageData(0,0,W,H),d=pixels.data,n=W*H;
+     const visited=new Uint8Array(n),labels=new Int32Array(n),queue=new Int32Array(n);
+     let bestLabel=0,bestScore=-Infinity,label=0;
+     // Keep the single connected silhouette centered on this grid position.
+     // Larger crop protects nose, ear and curled tail from truncation.
+     for(let i=0;i<n;i++){
+      if(visited[i]||d[i*4+3]<80)continue;
+      label++;let head=0,tail=1,sumX=0,sumY=0;
+      queue[0]=i;visited[i]=1;labels[i]=label;
       while(head<tail){
-       const v=queue[head++],xx=v%W,yy=(v/W)|0;
-       const n0=xx>0?v-1:-1,n1=xx<W-1?v+1:-1,n2=yy>0?v-W:-1,n3=yy<H-1?v+W:-1;
-       for(const n of [n0,n1,n2,n3]){
-        if(n>=0&&!seen[n]&&data[n*4+3]>=95){seen[n]=1;labels[n]=component;queue[tail++]=n}
+       const p=queue[head++],x=p%W,y=(p/W)|0;
+       sumX+=x;sumY+=y;
+       const adjacent=[x>0?p-1:-1,x<W-1?p+1:-1,y>0?p-W:-1,y<H-1?p+W:-1];
+       for(const q of adjacent)if(q>=0&&!visited[q]&&d[q*4+3]>=80){
+        visited[q]=1;labels[q]=label;queue[tail++]=q;
        }
       }
-      if(tail>largest){largest=tail;selected=component}
+      const midX=sumX/tail,midY=sumY/tail;
+      const distance=Math.hypot((midX-W/2)/(cw*.5),(midY-H/2)/(ch*.5));
+      // Exclude disconnected fragments from nearby animation frames.
+      const score=tail/(1+Math.pow(distance,3)*6);
+      if(score>bestScore){bestScore=score;bestLabel=label}
      }
-     // Keep the largest connected character plus its antialiased fringe.
-     // The tiny disconnected fragments from neighboring frames are rejected.
-     const keep=new Uint8Array(count);
-     for(let i=0;i<count;i++)if(labels[i]===selected)keep[i]=1;
-     const antialias=new Uint8Array(keep);
-     for(let i=0;i<count;i++)if(keep[i]){
-      const x=i%W,y=(i/W)|0;
-      for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
-       const nx=x+dx,ny=y+dy;
-       if(nx>=0&&nx<W&&ny>=0&&ny<H)antialias[ny*W+nx]=1;
+     const keep=new Uint8Array(n);
+     for(let i=0;i<n;i++)if(labels[i]===bestLabel)keep[i]=1;
+     // Antialias support; do not replace black ink with background coloring.
+     const margin=new Uint8Array(keep);
+     for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){
+      const i=y*W+x;
+      if(keep[i])for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+       const j=(y+dy)*W+x+dx;if(j>=0&&j<n)margin[j]=1;
       }
      }
-     for(let i=0;i<count;i++)if(!antialias[i])data[i*4+3]=0;
-     g.putImageData(sample,0,0);
-     frames.push(frame);
+     for(let i=0;i<n;i++)if(!margin[i])d[i*4+3]=0;
+     g.putImageData(pixels,0,0);
+     frames.push(tile);
     }
     output.push(frames);
    }
@@ -122,10 +126,9 @@ function boot(){
     if(moving)a.row=Math.abs(a.vx)>Math.abs(a.vy)*.8?(a.vx>=0?0:1):(a.vy<0?2:3);
     const frame=moving?Math.floor(a.phase)%6:0;
     const tile=a.frames[a.row]?.[frame];if(!tile)return;
-    const aspect=tile.height/tile.width,dh=size*aspect,x=a.x*w,y=a.y*h;
-    ctx.fillStyle='#CD071B';ctx.fillRect(x-size/2-3,y-dh*.7-3,size+6,dh+6);
+    const originalCellWidth=tile.width/1.48;const drawW=size*(tile.width/originalCellWidth);const dh=drawW*(tile.height/tile.width),x=a.x*w,y=a.y*h;
     ctx.fillStyle='rgba(80,0,0,.13)';ctx.beginPath();ctx.ellipse(x,y+dh*.32,size*.30,size*.055,0,0,Math.PI*2);ctx.fill();
-    ctx.drawImage(tile,x-size/2,y-dh*.7,size,dh);
+    ctx.drawImage(tile,x-drawW/2,y-dh*.7,drawW,dh);
    });
    if(active)requestAnimationFrame(animate);
   }
