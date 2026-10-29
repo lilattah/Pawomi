@@ -1,11 +1,11 @@
 {
   "sections": {
-    "s0": {
-      "type": "pawomi-main-page",
+    "main": {
+      "type": "pawomi-info-page",
       "settings": {}
     }
   },
   "order": [
-    "s0"
+    "main"
   ]
 }
