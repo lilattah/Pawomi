@@ -12,3 +12,22 @@ document.addEventListener('DOMContentLoaded',()=>{const btn=document.querySelect
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>observe());else observe();
  document.addEventListener('shopify:section:load',e=>observe(e.target));
 })();
+
+/* Featured carousel controls and local-only favorites. */
+(function(){
+ function initialize(root=document){
+  root.querySelectorAll('.featured-products').forEach(section=>{
+   if(section.dataset.carouselReady==='1')return;section.dataset.carouselReady='1';
+   const slider=section.querySelector('.featured-carousel'),track=section.querySelector('.product-grid');
+   if(!slider||!track)return;
+   const arrows=section.querySelectorAll('[data-slide]');
+   function updateArrows(){arrows.forEach(btn=>btn.disabled=btn.dataset.slide==='-1'?slider.scrollLeft<=3:slider.scrollLeft+slider.clientWidth>=slider.scrollWidth-3)}
+   arrows.forEach(btn=>btn.addEventListener('click',()=>{const card=track.querySelector('.product-card');if(!card)return;const gap=parseFloat(getComputedStyle(track).gap)||14;slider.scrollBy({left:Number(btn.dataset.slide)*(card.getBoundingClientRect().width+gap),behavior:'smooth'})}));
+   slider.addEventListener('scroll',updateArrows,{passive:true});window.addEventListener('resize',updateArrows);requestAnimationFrame(updateArrows);
+   let saved=[];try{saved=JSON.parse(localStorage.getItem('pawomi-favorites')||'[]')}catch{}
+   section.querySelectorAll('[data-favorite-product]').forEach(button=>{const id=button.dataset.favoriteProduct;button.setAttribute('aria-pressed',String(saved.includes(id)));button.addEventListener('click',()=>{saved=saved.includes(id)?saved.filter(x=>x!==id):[...saved,id];button.setAttribute('aria-pressed',String(saved.includes(id)));try{localStorage.setItem('pawomi-favorites',JSON.stringify(saved))}catch{}})});
+  });
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>initialize());else initialize();
+ document.addEventListener('shopify:section:load',e=>initialize(e.target));
+})();
