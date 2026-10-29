@@ -19,65 +19,67 @@ function boot(){
   const cols=6,rows=4;
   function resize(){const rect=hero.getBoundingClientRect();w=Math.max(1,rect.width);h=Math.max(1,rect.height);dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
   function framesFromSheet(image){
-   // The uploaded 1536x1024 sheets have 6 columns and 4 direction rows.
-   // Each tile is extracted in source pixel coordinates with no scaling bleed.
-   const output=[], sw=image.naturalWidth,sh=image.naturalHeight;
-   for(let row=0;row<4;row++){
-    const cells=[];
-    for(let col=0;col<6;col++){
-     const sx=Math.round(col*sw/6),sy=Math.round(row*sh/4);
-     const ex=Math.round((col+1)*sw/6),ey=Math.round((row+1)*sh/4);
-     const cw=ex-sx,ch=ey-sy,frame=document.createElement('canvas');
-     frame.width=cw;frame.height=ch;
+   // Layout measured on the user's 1227x777 design canvas.
+   // Source image is first mapped to that coordinate system.
+   // Row order in the Pawomi sheets: right, left, up, down.
+   const DESIGN_W=1227,DESIGN_H=777,COLS=6,ROWS=4;
+   const specs=[
+    {direction:'right',w:212,h:197},
+    {direction:'left',w:212,h:197},
+    {direction:'up',w:160,h:210},
+    {direction:'down',w:160,h:210}
+   ];
+   const base=document.createElement('canvas');
+   base.width=DESIGN_W;base.height=DESIGN_H;
+   const bg=base.getContext('2d',{willReadFrequently:true});
+   bg.drawImage(image,0,0,DESIGN_W,DESIGN_H);
+   const pitchX=DESIGN_W/COLS,pitchY=DESIGN_H/ROWS;
+   const output=[];
+   for(let row=0;row<ROWS;row++){
+    const frames=[],spec=specs[row];
+    for(let col=0;col<COLS;col++){
+     const centerX=(col+.5)*pitchX,centerY=(row+.5)*pitchY;
+     const sourceX=Math.round(centerX-spec.w/2),sourceY=Math.round(centerY-spec.h/2);
+     const frame=document.createElement('canvas');
+     frame.width=spec.w;frame.height=spec.h;
      const g=frame.getContext('2d',{willReadFrequently:true});
-     g.drawImage(image,sx,sy,cw,ch,0,0,cw,ch);
-     let im;try{im=g.getImageData(0,0,cw,ch)}catch{cells.push(frame);continue}
-     const rgba=im.data,n=cw*ch;
-     const core=new Uint8Array(n),mask=new Uint8Array(n);
-     // Background is charcoal/brown, fur is ivory, and collar/patches are vivid.
-     // Avoid treating the brown background as orange fur (old segmentation bug).
-     for(let i=0;i<n;i++){
-      const k=i*4,r=rgba[k],gr=rgba[k+1],b=rgba[k+2];
-      const ivory=r>174&&gr>158&&b>125;
-      const red=r>118&&r>gr*1.65&&r>b*1.65;
-      const orange=r>161&&gr>79&&r>gr*1.22&&gr>b*1.28;
-      const gold=r>165&&gr>110&&b<105;
-      if(rgba[k+3]>50&&(ivory||red||orange||gold))core[i]=1;
+     // The requested crops can be wider/taller than the cell pitch.
+     // Strict clipping prevents an adjacent frame from appearing in this frame.
+     const safeX=Math.max(0,Math.ceil(col*pitchX-sourceX));
+     const safeY=Math.max(0,Math.ceil(row*pitchY-sourceY));
+     const safeRight=Math.min(spec.w,Math.floor((col+1)*pitchX-sourceX));
+     const safeBottom=Math.min(spec.h,Math.floor((row+1)*pitchY-sourceY));
+     const width=Math.max(0,safeRight-safeX),height=Math.max(0,safeBottom-safeY);
+     if(width&&height){
+      g.drawImage(base,sourceX+safeX,sourceY+safeY,width,height,safeX,safeY,width,height);
      }
-     // Reject small stray islands with a connected-component foreground pass.
-     const visited=new Uint8Array(n),stack=new Int32Array(n);
-     let biggest=[],componentCount=0;
-     for(let i=0;i<n;i++)if(core[i]&&!visited[i]){
-      let top=0,head=0;stack[top++]=i;visited[i]=1;
-      while(head<top){
-       const v=stack[head++],x=v%cw,y=(v/cw)|0;
-       const next=[x>0?v-1:-1,x<cw-1?v+1:-1,y>0?v-cw:-1,y<ch-1?v+cw:-1];
-       for(const u of next)if(u>=0&&core[u]&&!visited[u]){visited[u]=1;stack[top++]=u}
-      }
-      if(top>componentCount){componentCount=top;biggest=Array.from(stack.subarray(0,top))}
+     // Remove the original dark/chessboard background only where connected
+     // to the outer edge; dark ink lines enclosed by fur remain untouched.
+     let imgData;
+     try{imgData=g.getImageData(0,0,spec.w,spec.h)}catch{frames.push(frame);continue}
+     const d=imgData.data,W=spec.w,H=spec.h,n=W*H;
+     const visited=new Uint8Array(n),queue=new Int32Array(n);
+     let head=0,tail=0;
+     const background=(i)=>{
+      const p=i*4,r=d[p],green=d[p+1],blue=d[p+2],a=d[p+3];
+      if(a<8)return true;
+      // Neutral dark checkerboard or background, not colorful collar/fur.
+      const max=Math.max(r,green,blue),min=Math.min(r,green,blue);
+      return max<145&&(max-min)<28;
+     };
+     function seed(i){if(i>=0&&i<n&&!visited[i]&&background(i)){visited[i]=1;queue[tail++]=i}}
+     for(let x=0;x<W;x++){seed(x);seed((H-1)*W+x)}
+     for(let y=0;y<H;y++){seed(y*W);seed(y*W+W-1)}
+     while(head<tail){
+      const i=queue[head++],x=i%W,y=(i/W)|0;
+      if(x>0)seed(i-1);if(x<W-1)seed(i+1);
+      if(y>0)seed(i-W);if(y<H-1)seed(i+W);
      }
-     // Keep larger separated paws/tail islands too, but not background noise.
-     // Fur-filled pixels seed a bounded contour expansion preserving ink outlines.
-     for(const i of biggest)mask[i]=1;
-     // Also keep original colored pixels close to the main character; limbs may disconnect.
-     const seed=new Uint8Array(n);for(let i=0;i<n;i++)if(core[i])seed[i]=1;
-     const radius=Math.max(10,Math.round(cw*.065));
-     const horiz=new Uint8Array(n);
-     for(let y=0;y<ch;y++){let count=0;for(let x=0;x<cw;x++){
-       if(x+radius<cw)count+=seed[y*cw+x+radius];
-       if(x-radius-1>=0)count-=seed[y*cw+x-radius-1];
-       if(count>0)horiz[y*cw+x]=1;
-     }}
-     for(let x=0;x<cw;x++){let count=0;for(let y=0;y<ch;y++){
-       if(y+radius<ch)count+=horiz[(y+radius)*cw+x];
-       if(y-radius-1>=0)count-=horiz[(y-radius-1)*cw+x];
-       if(count>0)mask[y*cw+x]=1;
-     }}
-     for(let i=0;i<n;i++)if(!mask[i])rgba[i*4+3]=0;
-     g.putImageData(im,0,0);
-     cells.push(frame);
+     for(let i=0;i<n;i++)if(visited[i])d[i*4+3]=0;
+     g.putImageData(imgData,0,0);
+     frames.push(frame);
     }
-    output.push(cells);
+    output.push(frames);
    }
    return output;
   }
