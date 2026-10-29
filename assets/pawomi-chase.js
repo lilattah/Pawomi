@@ -1,92 +1,125 @@
-/* Pawomi Hero Chase — four-direction 6x4 sprite movement, paired collision-free steering */
+/* PAWOMI HERO GAME v2 — cropped transparent sprite frames + independent roaming */
 (()=>{'use strict';
 function boot(){
-document.querySelectorAll('.hero.red-section').forEach(hero=>{
- if(hero.dataset.pawomiGame)return;hero.dataset.pawomiGame='1';
- const canvas=document.createElement('canvas');canvas.className='pawomi-chase-canvas';canvas.setAttribute('aria-hidden','true');hero.append(canvas);
- const ctx=canvas.getContext('2d');if(!ctx)return;
- const urls=hero.dataset.gameBase||'./';
- const actors=[
-  {name:'dog',src:urls+'pawomi-game-dog.png',x:.70,y:.52,vx:0,vy:0,size:128,phase:0,ready:false},
-  {name:'cat',src:urls+'pawomi-game-cat.png',x:.82,y:.52,vx:0,vy:0,size:128,phase:2,ready:false}
- ];
- const pointer={x:.77,y:.53,active:false};
- let w=1,h=1,dpr=1,last=0,elapsed=0;
- const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
- function resize(){
-  const r=hero.getBoundingClientRect();w=Math.max(1,r.width);h=Math.max(1,r.height);
-  dpr=Math.min(window.devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
-  ctx.setTransform(dpr,0,0,dpr,0,0);
- }
- function makeTransparent(img){
-  const off=document.createElement('canvas');off.width=img.naturalWidth;off.height=img.naturalHeight;
-  const g=off.getContext('2d',{willReadFrequently:true});g.drawImage(img,0,0);let data;
-  try{data=g.getImageData(0,0,off.width,off.height)}catch{return off}
-  const arr=data.data;
-  // Only remove dark low-saturation backdrop. Keep black ink pixels; preserves original art.
-  for(let i=0;i<arr.length;i+=4){
-   const r=arr[i],gg=arr[i+1],b=arr[i+2],alpha=arr[i+3];
-   if(alpha===0)continue;
-   const lum=(r+gg+b)/3,diff=Math.max(r,gg,b)-Math.min(r,gg,b);
-   if(lum>=19 && lum<115 && diff<31){
-     const strength=clamp((115-lum)/18,0,1);arr[i+3]=Math.round(alpha*(1-strength));
+ document.querySelectorAll('.hero.red-section').forEach(hero=>{
+  if(hero.dataset.pawomiGame==='v2')return;
+  hero.dataset.pawomiGame='v2';
+  hero.querySelectorAll('.pawomi-chase-canvas').forEach(el=>el.remove());
+  const canvas=document.createElement('canvas');
+  canvas.className='pawomi-chase-canvas';canvas.setAttribute('aria-hidden','true');hero.append(canvas);
+  const ctx=canvas.getContext('2d');if(!ctx)return;
+  const base=hero.dataset.gameBase||'./';
+  const agents=[
+   {name:'dog',src:base+'pawomi-game-dog.png',x:.68,y:.57,vx:0,vy:0,phase:0,row:0,frames:null,goal:null,until:0},
+   {name:'cat',src:base+'pawomi-game-cat.png',x:.82,y:.56,vx:0,vy:0,phase:2,row:0,frames:null,goal:null,until:0}
+  ];
+  const mouse={x:.7,y:.5,active:false,last:0};
+  const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+  let w=1,h=1,dpr=1,last=0,clock=0,active=true;
+  const cols=6,rows=4;
+  function resize(){const rect=hero.getBoundingClientRect();w=Math.max(1,rect.width);h=Math.max(1,rect.height);dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
+  function framesFromSheet(image){
+   const cw=image.naturalWidth/cols,ch=image.naturalHeight/rows;
+   const out=[];
+   for(let row=0;row<rows;row++){
+    const frames=[];
+    for(let col=0;col<cols;col++){
+     const tile=document.createElement('canvas');tile.width=Math.round(cw);tile.height=Math.round(ch);
+     const g=tile.getContext('2d',{willReadFrequently:true});
+     g.drawImage(image,col*cw,row*ch,cw,ch,0,0,tile.width,tile.height);
+     let data;try{data=g.getImageData(0,0,tile.width,tile.height)}catch{frames.push(tile);continue}
+     const {width:tw,height:th}=tile,src=data.data;
+     // Segment light fur, red collar, warm orange patches and golden bells.
+     // Pixels must belong to the current tile; never sample adjacent frames.
+     const core=new Uint8Array(tw*th),keep=new Uint8Array(tw*th);
+     for(let y=0;y<th;y++)for(let x=0;x<tw;x++){
+      const i=y*tw+x,j=i*4,r=src[j],gr=src[j+1],b=src[j+2],al=src[j+3];
+      const light=Math.min(r,gr,b)>143 && r+gr+b>525;
+      const warm=r>128&&r>gr*1.24&&gr>b*.85;
+      const yellow=r>157&&gr>90&&b<gr*.85;
+      const skin=r>125&&gr>72&&b>46&&r>gr*1.12;
+      if(al>50&&(light||warm||yellow||skin))core[i]=1;
+     }
+     // Dilate near light / saturated character fill to retain black contour.
+     const radius=Math.max(5,Math.round(tw*.033));
+     for(let y=0;y<th;y++)for(let x=0;x<tw;x++)if(core[y*tw+x]){
+      for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
+       if(dx*dx+dy*dy>radius*radius)continue;
+       const xx=x+dx,yy=y+dy;if(xx>=0&&xx<tw&&yy>=0&&yy<th)keep[yy*tw+xx]=1;
+      }
+     }
+     for(let i=0;i<keep.length;i++)if(!keep[i])src[i*4+3]=0;
+     g.putImageData(data,0,0);
+     // Crop transparent margins *within each cell*, then render into a consistent
+     // padded frame so the different stride poses never change apparent scale.
+     frames.push(tile);
+    }
+    out.push(frames);
    }
+   return out;
   }
-  g.putImageData(data,0,0);return off;
- }
- actors.forEach(a=>{
-  const image=new Image();image.onload=()=>{a.sheet=makeTransparent(image);a.ready=true};image.onerror=()=>{a.ready=false};image.src=a.src;
- });
- function setTarget(clientX,clientY){
-  const r=hero.getBoundingClientRect();pointer.x=clamp((clientX-r.left)/r.width,.05,.95);pointer.y=clamp((clientY-r.top)/r.height,.13,.87);pointer.active=true;
- }
- hero.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||e.pointerType==='pen')setTarget(e.clientX,e.clientY)},{passive:true});
- hero.addEventListener('pointerleave',()=>{pointer.active=false});
- hero.addEventListener('pointerdown',e=>setTarget(e.clientX,e.clientY),{passive:true});
- if('ResizeObserver' in window)new ResizeObserver(resize).observe(hero);else window.addEventListener('resize',resize);resize();
- function render(now){
-  const dt=Math.min((now-(last||now))/1000,.04);last=now;elapsed+=dt;ctx.clearRect(0,0,w,h);
-  const scale=clamp(w/1250,.60,1.12);const size=clamp(Math.min(w*.125,h*.36),72,165);
-  const minGap=size*.95;
-  const targetX=pointer.x*w,targetY=pointer.y*h;
-  // Formation places both animals next to one another; never shares a center.
-  const centerX=clamp(targetX,size*1.25,w-size*1.25);
-  const centerY=clamp(targetY,h*.22,h-size*.65);
-  const destinations=[{x:centerX-minGap*.55,y:centerY},{x:centerX+minGap*.55,y:centerY}];
-  actors.forEach((a,i)=>{
-   const goal=destinations[i],gx=goal.x/w,gy=goal.y/h;
-   if(!a.initialized){a.x=(i===0?.65:.80);a.y=.54;a.initialized=true}
-   const dx=(gx-a.x)*w,dy=(gy-a.y)*h,dist=Math.hypot(dx,dy);
-   const maxSpeed=(pointer.active?230:135)*scale;
-   const speed=dist<8?0:Math.min(maxSpeed,dist*3.3);
-   const tvx=dist>0?dx/dist*speed:0,tvy=dist>0?dy/dist*speed:0;
-   const follow=1-Math.exp(-dt*7);a.vx+=(tvx-a.vx)*follow;a.vy+=(tvy-a.vy)*follow;
-   a.x=clamp(a.x+a.vx*dt/w,size*.45/w,1-size*.45/w);
-   a.y=clamp(a.y+a.vy*dt/h,size*.45/h,1-size*.42/h);
-  });
-  // Guaranteed separation after steering; right character remains to the right of the left one.
-  let ax=actors[0],bx=actors[1],px=(bx.x-ax.x)*w,py=(bx.y-ax.y)*h;
-  if(Math.hypot(px,py)<minGap){const mx=(ax.x+bx.x)/2;ax.x=(mx-minGap/(2*w));bx.x=(mx+minGap/(2*w));ax.y=bx.y=(ax.y+bx.y)/2}
-  actors.forEach(a=>{
-    if(!a.ready)return;
-    const moving=Math.hypot(a.vx,a.vy)>13;
-    if(moving){a.phase+=dt*(Math.hypot(a.vx,a.vy)/110)*8}
-    const row=!moving?(a.row??0):Math.abs(a.vx)>Math.abs(a.vy)*.7?(a.vx>=0?0:1):(a.vy<0?2:3);
-    a.row=row;
+  agents.forEach(a=>{const image=new Image();image.onload=()=>{a.frames=framesFromSheet(image)};image.src=a.src});
+  function target(e){
+   const r=hero.getBoundingClientRect();mouse.x=clamp((e.clientX-r.left)/r.width,.04,.96);mouse.y=clamp((e.clientY-r.top)/r.height,.12,.90);
+   mouse.active=true;mouse.last=performance.now();
+  }
+  hero.addEventListener('pointermove',e=>{if(e.pointerType==='mouse'||e.pointerType==='pen')target(e)},{passive:true});
+  hero.addEventListener('pointerdown',target,{passive:true});
+  hero.addEventListener('pointerleave',()=>{mouse.active=false});
+  function randomGoal(a,i,size){
+   // Roam predominantly on the right half so headings stay easy to read.
+   const left=Math.min(w-size,Math.max(size*.62,w*.46));
+   const right=Math.max(left+1,w-size*.6);
+   const sideBias=i===0?-.055:.055;
+   a.goal={x:clamp(left+Math.random()*(right-left)+sideBias*w,size*.6,w-size*.6),y:clamp(h*.2+Math.random()*h*.58,size*.4,h-size*.48)};
+   a.until=clock+2+Math.random()*4;
+  }
+  function animate(ts){
+   if(!document.contains(hero))return;
+   const dt=Math.min((ts-(last||ts))/1000,.045);last=ts;clock+=dt;
+   ctx.clearRect(0,0,w,h);
+   const size=clamp(Math.min(w*.11,h*.31),64,145);
+   if(mouse.active && ts-mouse.last>2500)mouse.active=false;
+   const minGap=size*1.13;
+   const targetX=mouse.x*w,targetY=mouse.y*h;
+   agents.forEach((a,i)=>{
+    if(!a.goal||(!mouse.active&&(clock>a.until||Math.hypot(a.goal.x-a.x*w,a.goal.y-a.y*h)<size*.22)))randomGoal(a,i,size);
+    let tx,ty;
+    if(mouse.active){const center=clamp(targetX,size*1.3,w-size*1.3);tx=center+(i===0?-minGap*.58:minGap*.58);ty=clamp(targetY,h*.17,h-size*.43)}
+    else {tx=a.goal.x;ty=a.goal.y}
+    const dx=tx-a.x*w,dy=ty-a.y*h,dist=Math.hypot(dx,dy);
+    const maxSpeed=(mouse.active?245:88)*clamp(w/1250,.65,1.15);
+    const speed=dist<5?0:Math.min(maxSpeed,dist*(mouse.active?3.3:1.8));
+    const follow=1-Math.exp(-dt*5);
+    a.vx+=(dist>0?dx/dist*speed-a.vx:-a.vx)*follow;
+    a.vy+=(dist>0?dy/dist*speed-a.vy:-a.vy)*follow;
+    a.x=clamp(a.x+a.vx*dt/w,size*.5/w,1-size*.5/w);
+    a.y=clamp(a.y+a.vy*dt/h,size*.36/h,1-size*.36/h);
+   });
+   // Maintain separation even when both paths cross. Correct along the actual
+   // collision vector, not just by moving both to the same Y coordinate.
+   const a=agents[0],b=agents[1];let dx=(b.x-a.x)*w,dy=(b.y-a.y)*h,d=Math.hypot(dx,dy);
+   if(d<minGap){if(d<.001){dx=1;dy=0;d=1}
+    const amount=(minGap-d)/2,nx=dx/d,ny=dy/d;
+    a.x=clamp(a.x-nx*amount/w,size*.5/w,1-size*.5/w);a.y=clamp(a.y-ny*amount/h,size*.36/h,1-size*.36/h);
+    b.x=clamp(b.x+nx*amount/w,size*.5/w,1-size*.5/w);b.y=clamp(b.y+ny*amount/h,size*.36/h,1-size*.36/h);
+   }
+   agents.forEach(a=>{
+    if(!a.frames)return;
+    const velocity=Math.hypot(a.vx,a.vy),moving=velocity>14;
+    if(moving)a.phase=(a.phase+dt*clamp(velocity/35,2,8))%6;
+    if(moving)a.row=Math.abs(a.vx)>Math.abs(a.vy)*.8?(a.vx>=0?0:1):(a.vy<0?2:3);
     const frame=moving?Math.floor(a.phase)%6:0;
-    const cw=a.sheet.width/6,ch=a.sheet.height/4;
-    const drawW=size,drawH=size*(ch/cw);
-    const x=a.x*w,y=a.y*h;
-    ctx.save();
-    // A subtle grounded shadow remains under the character.
-    ctx.fillStyle='rgba(85,0,12,.14)';ctx.beginPath();ctx.ellipse(x,y+drawH*.34,size*.34,size*.073,0,0,Math.PI*2);ctx.fill();
-    ctx.drawImage(a.sheet,frame*cw,row*ch,cw,ch,x-drawW/2,y-drawH*.68,drawW,drawH);
-    ctx.restore();
-  });
-  requestAnimationFrame(render);
- }
- requestAnimationFrame(render);
-});
+    const tile=a.frames[a.row]?.[frame];if(!tile)return;
+    const aspect=tile.height/tile.width,dh=size*aspect,x=a.x*w,y=a.y*h;
+    ctx.fillStyle='rgba(80,0,0,.13)';ctx.beginPath();ctx.ellipse(x,y+dh*.32,size*.30,size*.055,0,0,Math.PI*2);ctx.fill();
+    ctx.drawImage(tile,x-size/2,y-dh*.7,size,dh);
+   });
+   if(active)requestAnimationFrame(animate);
+  }
+  if('ResizeObserver'in window)new ResizeObserver(resize).observe(hero);else addEventListener('resize',resize);
+  resize();requestAnimationFrame(animate);
+ });
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else boot();
 document.addEventListener('shopify:section:load',boot);
