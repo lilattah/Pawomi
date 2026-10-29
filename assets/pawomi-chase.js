@@ -40,14 +40,18 @@ function boot(){
       const skin=r>125&&gr>72&&b>46&&r>gr*1.12;
       if(al>50&&(light||warm||yellow||skin))core[i]=1;
      }
-     // Dilate near light / saturated character fill to retain black contour.
-     const radius=Math.max(5,Math.round(tw*.033));
-     for(let y=0;y<th;y++)for(let x=0;x<tw;x++)if(core[y*tw+x]){
-      for(let dy=-radius;dy<=radius;dy++)for(let dx=-radius;dx<=radius;dx++){
-       if(dx*dx+dy*dy>radius*radius)continue;
-       const xx=x+dx,yy=y+dy;if(xx>=0&&xx<tw&&yy>=0&&yy<th)keep[yy*tw+xx]=1;
-      }
-     }
+     // Two-pass contour-preserving dilation, linear in image area.
+     const radius=Math.max(5,Math.round(tw*.033)),horizontal=new Uint8Array(tw*th);
+     for(let y=0;y<th;y++){let count=0;for(let x=0;x<tw;x++){
+       if(x+radius<tw)count+=core[y*tw+x+radius];
+       if(x-radius-1>=0)count-=core[y*tw+x-radius-1];
+       if(count>0)horizontal[y*tw+x]=1;
+     }}
+     for(let x=0;x<tw;x++){let count=0;for(let y=0;y<th;y++){
+       if(y+radius<th)count+=horizontal[(y+radius)*tw+x];
+       if(y-radius-1>=0)count-=horizontal[(y-radius-1)*tw+x];
+       if(count>0)keep[y*tw+x]=1;
+     }}
      for(let i=0;i<keep.length;i++)if(!keep[i])src[i*4+3]=0;
      g.putImageData(data,0,0);
      // Crop transparent margins *within each cell*, then render into a consistent
