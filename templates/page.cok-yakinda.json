@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "main": {
+      "type": "pawomi-main-coming-soon",
+      "settings": {}
+    }
+  },
+  "order": [
+    "main"
+  ]
+}
