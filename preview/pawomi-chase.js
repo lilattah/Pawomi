@@ -19,48 +19,67 @@ function boot(){
   const cols=6,rows=4;
   function resize(){const rect=hero.getBoundingClientRect();w=Math.max(1,rect.width);h=Math.max(1,rect.height);dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
   function framesFromSheet(image){
-   const cw=image.naturalWidth/cols,ch=image.naturalHeight/rows;
-   const out=[];
-   for(let row=0;row<rows;row++){
-    const frames=[];
-    for(let col=0;col<cols;col++){
-     const tile=document.createElement('canvas');tile.width=Math.round(cw);tile.height=Math.round(ch);
-     const g=tile.getContext('2d',{willReadFrequently:true});
-     g.drawImage(image,col*cw,row*ch,cw,ch,0,0,tile.width,tile.height);
-     let data;try{data=g.getImageData(0,0,tile.width,tile.height)}catch{frames.push(tile);continue}
-     const {width:tw,height:th}=tile,src=data.data;
-     // Segment light fur, red collar, warm orange patches and golden bells.
-     // Pixels must belong to the current tile; never sample adjacent frames.
-     const core=new Uint8Array(tw*th),keep=new Uint8Array(tw*th);
-     for(let y=0;y<th;y++)for(let x=0;x<tw;x++){
-      const i=y*tw+x,j=i*4,r=src[j],gr=src[j+1],b=src[j+2],al=src[j+3];
-      const light=Math.min(r,gr,b)>143 && r+gr+b>525;
-      const warm=r>128&&r>gr*1.24&&gr>b*.85;
-      const yellow=r>157&&gr>90&&b<gr*.85;
-      const skin=r>125&&gr>72&&b>46&&r>gr*1.12;
-      if(al>50&&(light||warm||yellow||skin))core[i]=1;
+   // The uploaded 1536x1024 sheets have 6 columns and 4 direction rows.
+   // Each tile is extracted in source pixel coordinates with no scaling bleed.
+   const output=[], sw=image.naturalWidth,sh=image.naturalHeight;
+   for(let row=0;row<4;row++){
+    const cells=[];
+    for(let col=0;col<6;col++){
+     const sx=Math.round(col*sw/6),sy=Math.round(row*sh/4);
+     const ex=Math.round((col+1)*sw/6),ey=Math.round((row+1)*sh/4);
+     const cw=ex-sx,ch=ey-sy,frame=document.createElement('canvas');
+     frame.width=cw;frame.height=ch;
+     const g=frame.getContext('2d',{willReadFrequently:true});
+     g.drawImage(image,sx,sy,cw,ch,0,0,cw,ch);
+     let im;try{im=g.getImageData(0,0,cw,ch)}catch{cells.push(frame);continue}
+     const rgba=im.data,n=cw*ch;
+     const core=new Uint8Array(n),mask=new Uint8Array(n);
+     // Background is charcoal/brown, fur is ivory, and collar/patches are vivid.
+     // Avoid treating the brown background as orange fur (old segmentation bug).
+     for(let i=0;i<n;i++){
+      const k=i*4,r=rgba[k],gr=rgba[k+1],b=rgba[k+2];
+      const ivory=r>174&&gr>158&&b>125;
+      const red=r>118&&r>gr*1.65&&r>b*1.65;
+      const orange=r>161&&gr>79&&r>gr*1.22&&gr>b*1.28;
+      const gold=r>165&&gr>110&&b<105;
+      if(rgba[k+3]>50&&(ivory||red||orange||gold))core[i]=1;
      }
-     // Two-pass contour-preserving dilation, linear in image area.
-     const radius=Math.max(5,Math.round(tw*.033)),horizontal=new Uint8Array(tw*th);
-     for(let y=0;y<th;y++){let count=0;for(let x=0;x<tw;x++){
-       if(x+radius<tw)count+=core[y*tw+x+radius];
-       if(x-radius-1>=0)count-=core[y*tw+x-radius-1];
-       if(count>0)horizontal[y*tw+x]=1;
+     // Reject small stray islands with a connected-component foreground pass.
+     const visited=new Uint8Array(n),stack=new Int32Array(n);
+     let biggest=[],componentCount=0;
+     for(let i=0;i<n;i++)if(core[i]&&!visited[i]){
+      let top=0,head=0;stack[top++]=i;visited[i]=1;
+      while(head<top){
+       const v=stack[head++],x=v%cw,y=(v/cw)|0;
+       const next=[x>0?v-1:-1,x<cw-1?v+1:-1,y>0?v-cw:-1,y<ch-1?v+cw:-1];
+       for(const u of next)if(u>=0&&core[u]&&!visited[u]){visited[u]=1;stack[top++]=u}
+      }
+      if(top>componentCount){componentCount=top;biggest=Array.from(stack.subarray(0,top))}
+     }
+     // Keep larger separated paws/tail islands too, but not background noise.
+     // Fur-filled pixels seed a bounded contour expansion preserving ink outlines.
+     for(const i of biggest)mask[i]=1;
+     // Also keep original colored pixels close to the main character; limbs may disconnect.
+     const seed=new Uint8Array(n);for(const i of biggest)seed[i]=1;
+     const radius=Math.max(10,Math.round(cw*.065));
+     const horiz=new Uint8Array(n);
+     for(let y=0;y<ch;y++){let count=0;for(let x=0;x<cw;x++){
+       if(x+radius<cw)count+=seed[y*cw+x+radius];
+       if(x-radius-1>=0)count-=seed[y*cw+x-radius-1];
+       if(count>0)horiz[y*cw+x]=1;
      }}
-     for(let x=0;x<tw;x++){let count=0;for(let y=0;y<th;y++){
-       if(y+radius<th)count+=horizontal[(y+radius)*tw+x];
-       if(y-radius-1>=0)count-=horizontal[(y-radius-1)*tw+x];
-       if(count>0)keep[y*tw+x]=1;
+     for(let x=0;x<cw;x++){let count=0;for(let y=0;y<ch;y++){
+       if(y+radius<ch)count+=horiz[(y+radius)*cw+x];
+       if(y-radius-1>=0)count-=horiz[(y-radius-1)*cw+x];
+       if(count>0)mask[y*cw+x]=1;
      }}
-     for(let i=0;i<keep.length;i++)if(!keep[i])src[i*4+3]=0;
-     g.putImageData(data,0,0);
-     // Crop transparent margins *within each cell*, then render into a consistent
-     // padded frame so the different stride poses never change apparent scale.
-     frames.push(tile);
+     for(let i=0;i<n;i++)if(!mask[i])rgba[i*4+3]=0;
+     g.putImageData(im,0,0);
+     cells.push(frame);
     }
-    out.push(frames);
+    output.push(cells);
    }
-   return out;
+   return output;
   }
   agents.forEach(a=>{const image=new Image();image.onload=()=>{a.frames=framesFromSheet(image)};image.src=a.src});
   function target(e){
