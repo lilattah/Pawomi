@@ -80,3 +80,19 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 @media (max-width:600px){
  .hero > .wrap.hero-grid,.hero .wrap.hero-grid{width:calc(100% - 28px);max-width:1200px;margin-inline:auto}
 }
+
+/* Collection feature — organic editorial adventure banner */
+.promo.promo-adventure{position:relative;isolation:isolate;display:grid;grid-template-columns:43% 57%;min-height:385px;background:#d9ecf8;overflow:hidden;border-radius:27px;align-items:stretch}
+.promo-adventure>div:first-child{position:relative;z-index:2;display:flex;flex-direction:column;justify-content:center;padding:38px 46px;background:transparent}
+.promo-adventure>div:first-child::before{content:"";position:absolute;z-index:-1;inset:0 -62px 0 0;background:#ffe08a;clip-path:polygon(0 0,97% 0,100% 9%,96% 19%,98% 30%,95% 42%,99% 55%,96% 69%,100% 83%,96% 100%,0 100%)}
+.promo-adventure .eyebrow{font-size:12px;letter-spacing:.06em}
+.promo-adventure h2{font-family:var(--font-display,'Archivo Black',sans-serif);font-size:clamp(2.45rem,4vw,4.2rem);line-height:1.03;letter-spacing:-.055em;max-width:430px;margin:16px 0 14px}
+.promo-adventure p:not(.eyebrow){font-size:clamp(14px,1.45vw,18px);line-height:1.45;max-width:385px;margin:0 0 23px}
+.promo-adventure .btn{align-self:flex-start;padding:15px 27px}
+.promo-adventure .promo-adventure-art{position:relative;overflow:hidden;background:linear-gradient(#c5e2f6 0%,#eef6f6 69%,#b6c977 100%);min-height:385px}
+.promo-adventure-art::after{content:"";position:absolute;bottom:-32px;left:0;right:0;height:95px;background:#83a96b55;border-radius:50% 50% 0 0}
+.promo-adventure .promo-adventure-art img.promo-dog,.promo-adventure .promo-adventure-art img.promo-cat{position:absolute;z-index:1;object-fit:contain;width:auto;height:auto;max-height:none;max-width:none;padding:0;filter:drop-shadow(0 12px 12px #364b5222)}
+.promo-adventure .promo-dog{width:68%!important;max-width:68%!important;bottom:0;left:0;height:89%!important}
+.promo-adventure .promo-cat{width:57%!important;max-width:57%!important;bottom:0;right:-3%;height:75%!important}
+.promo-adventure .promo-sun{position:absolute;z-index:1;top:12px;right:35px;font-size:68px;color:#ffac20;line-height:1}
+@media(max-width:700px){.promo.promo-adventure{grid-template-columns:1fr;min-height:0}.promo-adventure>div:first-child{padding:30px 27px 42px}.promo-adventure>div:first-child::before{inset:0;clip-path:polygon(0 0,100% 0,100% 90%,90% 94%,75% 91%,60% 97%,40% 92%,20% 97%,0 93%)}.promo-adventure h2{font-size:clamp(2.3rem,9vw,3.5rem)}.promo-adventure .promo-adventure-art{min-height:255px}.promo-adventure .promo-dog{height:100%!important}.promo-adventure .promo-cat{height:80%!important}}
