@@ -114,3 +114,7 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
   mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 0 H600 V342 C515 390 451 329 355 362 C260 400 178 338 85 370 L0 354 Z'/%3E%3C/svg%3E");
  }
 }
+
+/* Collection heading colors matched to approved reference */
+.two-cols > .collection-tile:first-child h2{color:#7F1825}
+.two-cols > .collection-tile:nth-child(2) h2{color:#183B65}
