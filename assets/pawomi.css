@@ -197,3 +197,11 @@ section:has(> .promo-adventure){position:relative;isolation:isolate}
  .promo-floating-assets .promo-decor-3{width:54px;max-width:54px;top:61%;right:28%}
  .promo-floating-assets .promo-decor-2{width:48px;max-width:48px;top:-4%;left:76%}
 }
+
+/* Correct the asset identities: decor-2 = black strokes; decor-3 = red heart */
+.promo-floating-assets .promo-decor-2{width:78px;max-width:78px;top:17%;left:auto;right:29%;transform:rotate(8deg)}
+.promo-floating-assets .promo-decor-3{width:65px;max-width:65px;top:-9%;right:auto;left:44%;transform:rotate(-12deg)}
+@media(max-width:700px){
+ .promo-floating-assets .promo-decor-2{width:52px;max-width:52px;top:62%;left:auto;right:29%}
+ .promo-floating-assets .promo-decor-3{width:48px;max-width:48px;top:43%;right:auto;left:5%}
+}
