@@ -232,3 +232,20 @@ section:has(> .promo-adventure){position:relative;isolation:isolate}
 .pawomi-duo-butterfly{position:absolute;right:11%;top:11%;width:65px;height:65px;object-fit:contain;z-index:2}
 @media(max-width:850px){.pawomi-duo-grid{gap:14px}.pawomi-duo-card{height:330px}.pawomi-duo-copy{padding:25px;max-width:85%}.pawomi-duo-dog{right:-15%}.pawomi-duo-pet{right:-15%}}
 @media(max-width:650px){.pawomi-duo-grid{grid-template-columns:1fr;gap:16px}.pawomi-duo-card{height:340px}.pawomi-duo-copy{max-width:78%}.pawomi-duo-copy h2{font-size:34px}.pawomi-duo-copy p{font-size:14px}.pawomi-duo-form{width:100%;max-width:330px;height:48px}.pawomi-duo-form button{padding:0 16px}.pawomi-duo-dog{width:57%;right:-9%;bottom:-12%}.pawomi-duo-pet{width:69%;right:-12%;bottom:-15%}}
+
+
+/* Pawomi locked typography — Baloo 2 ExtraBold + Nunito Sans */
+:root{--font-display:'Baloo 2',sans-serif;--font-body:'Nunito Sans',sans-serif}
+html,body,p,span,a,button,input,textarea,select,nav,li,label,.product-name,.price,.eyebrow,.pill{font-family:'Nunito Sans',sans-serif}
+h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter h2,.pawomi-story-copy h2,.pawomi-duo-copy h2,.promo-adventure h2{font-family:'Baloo 2',sans-serif;font-weight:800;letter-spacing:-.035em}
+.pawomi-duo-grid{gap:12px}
+.pawomi-duo-card{transition:transform .38s cubic-bezier(.22,1,.36,1),box-shadow .38s ease}
+.pawomi-duo-card:hover{transform:translateY(-7px);box-shadow:0 18px 34px rgba(40,29,17,.13)}
+.pawomi-duo-card img{transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.pawomi-duo-card:hover .pawomi-duo-dog,.pawomi-duo-card:hover .pawomi-duo-pet{transform:translateY(-7px) scale(1.045)}
+.pawomi-duo-card:hover .pawomi-duo-butterfly{transform:translate(5px,-8px) rotate(10deg)}
+.pawomi-duo-card .pawomi-duo-form button,.pawomi-duo-card .pawomi-duo-link{transition:background-color .25s,color .25s,transform .25s}
+.pawomi-duo-card .pawomi-duo-link:hover{background:#fff;color:#bf0920;transform:translateX(3px)}
+.pawomi-duo-card .pawomi-duo-form button:hover{background:#a90419}
+@media(max-width:650px){.pawomi-duo-grid{gap:12px}}
+@media(prefers-reduced-motion:reduce){.pawomi-duo-card,.pawomi-duo-card img,.pawomi-duo-card .pawomi-duo-form button,.pawomi-duo-card .pawomi-duo-link{transition:none!important}.pawomi-duo-card:hover,.pawomi-duo-card:hover img{transform:none!important}}
