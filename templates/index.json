@@ -99,6 +99,10 @@
     "s5": {
       "type": "pawomi-story-banner",
       "settings": {}
+    },
+    "s6": {
+      "type": "pawomi-duo-cards",
+      "settings": {}
     }
   },
   "order": [
@@ -107,6 +111,7 @@
     "s2",
     "s3",
     "s4",
-    "s5"
+    "s5",
+    "s6"
   ]
 }
