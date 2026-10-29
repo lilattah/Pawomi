@@ -579,3 +579,49 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
  .pawomi-hand-cursor[popover]{position:fixed!important;right:auto!important;bottom:auto!important;margin:0!important;padding:0!important;border:0!important;background-color:transparent!important;box-shadow:none!important;overflow:visible!important;color:transparent!important;pointer-events:none!important}
  .pawomi-hand-cursor[popover]:popover-open{display:block}
 }
+
+
+/* PAWOMI INTERIOR PAGE DESIGN SYSTEM v1.0 */
+.pawomi-page-eyebrow{font:800 12px 'Nunito Sans',sans-serif;letter-spacing:.16em;color:var(--red);margin-bottom:12px}
+.pawomi-info-page,.content-page{max-width:1200px}
+.pawomi-info-page>h1,.page-heading h1,.product-summary h1,.content-page h1{font-family:'Baloo 2',sans-serif;font-weight:800;line-height:1.1;letter-spacing:-.035em}
+.pawomi-info-page>h1{font-size:clamp(38px,5vw,64px);margin:0 0 24px}
+.pawomi-lead{font-size:clamp(17px,2.1vw,23px);max-width:760px;line-height:1.6}
+.pawomi-faq{display:grid;gap:12px;max-width:900px;margin-top:36px}
+.pawomi-faq details,.pawomi-info-page .rte,.product-summary details{border:1px solid #ede4d5;border-radius:18px;background:#fffdf8;padding:19px 24px}
+.pawomi-faq details summary{font-weight:800;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:18px;list-style:none}
+.pawomi-faq details summary::-webkit-details-marker{display:none}
+.pawomi-faq details[open] summary span{transform:rotate(45deg)}
+.pawomi-faq details p{line-height:1.7}
+.pawomi-benefit-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin:32px 0}
+.pawomi-benefit-grid article{border-radius:24px;padding:30px;background:#fff2e4;transition:transform .3s ease,box-shadow .3s ease}
+.pawomi-benefit-grid article:hover{transform:translateY(-5px);box-shadow:0 16px 30px #00000010}
+.pawomi-benefit-grid article:nth-child(3n+2){background:#fff6d9}
+.pawomi-benefit-grid article:nth-child(3n){background:#eaf3e3}
+.pawomi-benefit-grid article span{font-size:36px}
+.pawomi-benefit-grid article h3{font-family:'Baloo 2',sans-serif;font-size:25px;margin:14px 0 6px}
+.pawomi-benefit-grid article p{font-size:14px;line-height:1.7}
+.pawomi-rich-content{margin-top:35px;line-height:1.8;max-width:950px}
+.pawomi-rich-content:empty{display:none}
+.pawomi-content-note{font-size:13px;color:#776c64;max-width:800px}
+.pawomi-story-about{display:grid;grid-template-columns:1fr 1.2fr;gap:28px;align-items:center;background:#fff0dd;border-radius:28px;padding:26px 36px;overflow:hidden}
+.pawomi-story-about h2{font-family:'Baloo 2',sans-serif;font-size:clamp(28px,3.6vw,45px);line-height:1.1}
+.pawomi-story-about img{width:100%;max-height:390px;object-fit:contain;transition:transform .5s}
+.pawomi-story-about img:hover{transform:scale(1.045)}
+.pawomi-category-hero{display:grid;grid-template-columns:1fr minmax(260px,42%);gap:24px;align-items:center;background:#fff1da;border-radius:28px;padding:34px 44px;margin-bottom:32px;overflow:hidden}
+.pawomi-category-hero h1{font-family:'Baloo 2',sans-serif;font-size:clamp(39px,5vw,67px);line-height:1}
+.pawomi-category-hero img{width:100%;max-height:285px;object-fit:contain;transition:transform .55s}
+.pawomi-category-hero:hover img{transform:scale(1.06) rotate(-2deg)}
+.pawomi-category-hero--dog{background:#e4f3fb}
+.pawomi-category-hero--cat{background:#fff3e3}
+.pawomi-category-hero--campaign{background:#ffe7a3}
+.product-card,.blog-card{transition:transform .3s ease,box-shadow .3s ease}
+.product-card:hover,.blog-card:hover{transform:translateY(-5px)}
+.catalog-toolbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:22px}
+.catalog-toolbar select,.searchbar input,.buy-form select,.buy-form input{border:1px solid #e6dfd7;border-radius:12px;padding:12px;background:#fff}
+.pawomi-product-perks{display:flex;flex-wrap:wrap;gap:10px;margin:19px 0}
+.pawomi-product-perks span{padding:9px 13px;border-radius:50px;background:#fff2df;font-weight:700;font-size:12px}
+.pawomi-soft-card{background:#fff8ed;border-radius:22px;padding:24px}
+.pawomi-order-confirm{max-width:830px;text-align:center;margin:0 auto;padding:70px 24px}
+.pawomi-order-confirm h1{font-family:'Baloo 2',sans-serif;font-size:clamp(40px,6vw,72px);line-height:1}
+@media(max-width:760px){.pawomi-benefit-grid{grid-template-columns:1fr}.pawomi-story-about,.pawomi-category-hero{grid-template-columns:1fr;padding:26px}.pawomi-category-hero img{max-height:230px}}
