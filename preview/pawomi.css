@@ -20,3 +20,11 @@
 .pawomi-reveal .product-card{transition-delay:60ms}
 :focus-visible{outline:3px solid #ffbe43;outline-offset:4px}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.pawomi-reveal{opacity:1;transform:none}}
+
+/* Pawomi brand typography & logo v1.2 */
+:root{--font-display:'Archivo Black',Arial,sans-serif;--font-body:'Poppins',Arial,sans-serif}
+body,button,input,select,textarea{font-family:var(--font-body)}
+h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter h2{font-family:var(--font-display);font-weight:400;letter-spacing:-.04em}
+.brand{display:inline-flex;align-items:center;flex-shrink:0;line-height:0}
+.brand-logo{display:block;width:clamp(142px,15vw,192px);height:auto;max-height:46px;object-fit:contain}
+@media(max-width:600px){.brand-logo{width:142px;max-height:36px}}
