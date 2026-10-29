@@ -1,7 +1,7 @@
 {
   "sections": {
     "main": {
-      "type": "pawomi-main-collection",
+      "type": "pawomi-main-campaign",
       "settings": {}
     }
   },
