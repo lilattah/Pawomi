@@ -314,3 +314,57 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .pawomi-story-illustration img.story-embrace{z-index:2!important}
 .pawomi-story-copy,.pawomi-story-description{position:relative;z-index:3}
 @media(max-width:850px){.pawomi-story-illustration img.story-hills{inset:0!important;width:100%!important;height:100%!important}}
+
+
+/* Story layout correction: forest anchored to bottom; protected text zones */
+.pawomi-story-banner{
+  min-height:510px!important;
+  grid-template-columns:34% 42% 24%!important;
+  align-items:start!important;
+  background:#fff2df!important;
+}
+.pawomi-story-banner .pawomi-story-copy{
+  align-self:start!important;
+  padding:48px 0 35px 46px!important;
+  z-index:6!important;
+}
+.pawomi-story-banner .pawomi-story-description{
+  align-self:start!important;
+  padding:55px 35px 18px 12px!important;
+  z-index:6!important;
+}
+.pawomi-story-banner .pawomi-story-illustration img.story-hills{
+  top:auto!important;
+  left:0!important;
+  right:0!important;
+  bottom:0!important;
+  width:100%!important;
+  height:38%!important;
+  object-fit:fill!important;
+  z-index:0!important;
+  transform-origin:center bottom!important;
+}
+.pawomi-story-banner .pawomi-story-illustration img.story-embrace{
+  width:112%!important;
+  height:78%!important;
+  left:-4%!important;
+  bottom:0!important;
+  object-fit:contain!important;
+  object-position:bottom center!important;
+  z-index:3!important;
+}
+.pawomi-story-banner .story-heart{z-index:4}
+@media(max-width:850px){
+ .pawomi-story-banner{grid-template-columns:44% 56%!important;min-height:550px!important}
+ .pawomi-story-banner .pawomi-story-copy{padding:35px 0 20px 28px!important}
+ .pawomi-story-banner .pawomi-story-description{grid-column:1/-1;grid-row:2;justify-self:start;padding:0 28px 22px!important;max-width:48%!important}
+ .pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:10%!important;width:95%!important;height:67%!important}
+ .pawomi-story-banner .pawomi-story-illustration img.story-hills{height:34%!important}
+}
+@media(max-width:520px){
+ .pawomi-story-banner{display:flex!important;flex-direction:column!important;min-height:670px!important}
+ .pawomi-story-banner .pawomi-story-copy{padding:28px 25px 0!important;align-self:stretch!important}
+ .pawomi-story-banner .pawomi-story-description{padding:15px 25px 0!important;max-width:100%!important;align-self:stretch!important}
+ .pawomi-story-banner .pawomi-story-illustration img.story-hills{height:31%!important}
+ .pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:0!important;width:100%!important;height:46%!important}
+}
