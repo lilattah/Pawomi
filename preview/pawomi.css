@@ -269,3 +269,23 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .pawomi-duo-butterfly{right:13%;top:8%;width:55px;height:55px}
 @media(max-width:850px){.pawomi-story-banner{grid-template-columns:44% 56%}.pawomi-story-illustration{min-height:250px}.pawomi-story-illustration img.story-embrace{width:105%;height:100%;left:-3%}.pawomi-duo-card{height:330px}}
 @media(max-width:650px){.pawomi-story-illustration{min-height:270px}.pawomi-story-illustration img.story-embrace{width:100%;height:100%;left:0}.pawomi-duo-card{height:340px}.pawomi-duo-copy h2{font-size:34px}.pawomi-duo-dog{right:-10%;width:60%}.pawomi-duo-pet{right:-5%;width:65%}}
+
+/* Patili İlhamlar composition and illustration hover */
+.pawomi-inspiration .pawomi-duo-pet{
+  bottom:3%;
+  height:88%;
+  transform-origin:center bottom;
+  transition:transform .5s cubic-bezier(.22,1,.36,1),filter .5s ease;
+}
+.pawomi-inspiration:hover .pawomi-duo-pet{
+  transform:translateY(-11px) scale(1.055);
+  filter:drop-shadow(0 12px 10px rgba(28,48,22,.16));
+}
+.pawomi-inspiration .pawomi-duo-butterfly{display:none!important}
+@media(max-width:650px){
+ .pawomi-inspiration .pawomi-duo-pet{bottom:3%;height:84%}
+}
+@media(prefers-reduced-motion:reduce){
+ .pawomi-inspiration .pawomi-duo-pet{transition:none!important}
+ .pawomi-inspiration:hover .pawomi-duo-pet{transform:none!important;filter:none}
+}
