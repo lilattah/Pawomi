@@ -386,3 +386,111 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .pawomi-story-banner .heart-two{position:absolute;left:auto;right:21%;top:8%}
 @media(max-width:900px){.pawomi-story-banner{aspect-ratio:auto;min-height:420px!important}.pawomi-story-banner .pawomi-story-copy{left:4%!important;width:37%!important;max-width:37%!important}.pawomi-story-banner .pawomi-story-copy h2{font-size:clamp(28px,4vw,43px)!important}.pawomi-story-banner .pawomi-story-description{right:3%!important;width:22%!important;max-width:22%!important}.pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:31%!important;width:53%!important}}
 @media(max-width:600px){.pawomi-story-banner{min-height:650px!important;display:block!important}.pawomi-story-banner .pawomi-story-copy{top:5%!important;left:6%!important;width:90%!important;max-width:90%!important}.pawomi-story-banner .pawomi-story-copy h2{font-size:clamp(32px,8vw,48px)!important;margin-bottom:12px!important}.pawomi-story-banner .pawomi-story-description{top:36%!important;left:6%!important;right:auto!important;width:88%!important;max-width:88%!important}.pawomi-story-banner .pawomi-story-description p{font-size:15px!important}.pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:10%!important;width:88%!important;height:55%!important}.pawomi-story-banner .pawomi-story-illustration img.story-hills{height:32%!important}.pawomi-story-banner .heart-one{left:76%;top:9%}.pawomi-story-banner .heart-two{right:7%;top:44%}}
+
+/* 2026-10-29 layout repair: edge-to-edge product photography */
+.featured-products .featured-carousel .product-photo {
+  width:100%!important;
+  aspect-ratio:1 / 1!important;
+  height:auto!important;
+  padding:0!important;
+  margin:0!important;
+  border-radius:0!important;
+  overflow:hidden!important;
+  display:block!important;
+  line-height:0!important;
+}
+.featured-products .featured-carousel .product-photo img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  padding:0!important;
+  margin:0!important;
+  object-fit:cover!important;
+  object-position:center!important;
+}
+/* Story composition: two-line heading, accessible button and correctly scaled landscape */
+.pawomi-story-banner{
+  display:block!important;
+  position:relative!important;
+  aspect-ratio:auto!important;
+  height:405px!important;
+  min-height:405px!important;
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+.pawomi-story-banner::before{display:none!important;content:none!important}
+.pawomi-story-banner .pawomi-story-copy{
+  position:absolute!important;
+  top:11%!important;left:5%!important;
+  width:36%!important;max-width:36%!important;
+  padding:0!important;margin:0!important;z-index:5!important;
+}
+.pawomi-story-banner .pawomi-story-copy h2{
+  font-family:'Baloo 2',sans-serif!important;
+  font-weight:800!important;
+  font-size:clamp(33px,3vw,49px)!important;
+  line-height:1.04!important;
+  letter-spacing:-.035em!important;
+  margin:0 0 19px!important;
+  max-width:100%!important;
+}
+.pawomi-story-banner .pawomi-story-cta{
+  position:relative!important;
+  top:0!important;
+  display:inline-flex!important;align-items:center!important;
+  font-size:clamp(13px,1.1vw,17px)!important;
+  padding:12px 23px!important;
+  margin:0!important;
+  z-index:6!important;
+}
+.pawomi-story-banner .pawomi-story-description{
+  position:absolute!important;
+  top:13%!important;right:4%!important;
+  width:20%!important;max-width:20%!important;
+  padding:0!important;margin:0!important;
+  z-index:5!important;
+}
+.pawomi-story-banner .pawomi-story-description p{
+  font-size:clamp(12px,1.12vw,16px)!important;
+  line-height:1.52!important;
+  margin:0!important;
+}
+.pawomi-story-banner .pawomi-story-illustration{
+  position:absolute!important;inset:0!important;
+  min-height:0!important;z-index:1!important;
+  pointer-events:none!important;
+}
+.pawomi-story-banner .pawomi-story-illustration img.story-hills{
+  position:absolute!important;
+  inset:auto 0 0 0!important;
+  width:100%!important;height:34%!important;max-width:none!important;
+  object-fit:fill!important;object-position:center bottom!important;
+  z-index:1!important;
+}
+.pawomi-story-banner .pawomi-story-illustration img.story-embrace{
+  position:absolute!important;
+  inset:auto auto 0 31%!important;
+  width:51%!important;height:100%!important;max-width:none!important;
+  object-fit:contain!important;object-position:center bottom!important;
+  z-index:3!important;
+  transform-origin:center bottom!important;
+}
+.pawomi-story-banner .story-heart{z-index:4!important}
+.pawomi-story-banner .heart-one{top:5%!important;left:37%!important}
+.pawomi-story-banner .heart-two{top:7%!important;right:21%!important;left:auto!important}
+@media(max-width:900px){
+  .pawomi-story-banner{height:440px!important;min-height:440px!important}
+  .pawomi-story-banner .pawomi-story-copy{left:4%!important;width:40%!important;max-width:40%!important}
+  .pawomi-story-banner .pawomi-story-copy h2{font-size:clamp(28px,4vw,42px)!important}
+  .pawomi-story-banner .pawomi-story-description{width:21%!important;max-width:21%!important;right:3%!important}
+}
+@media(max-width:600px){
+  .pawomi-story-banner{display:block!important;height:620px!important;min-height:620px!important}
+  .pawomi-story-banner .pawomi-story-copy{top:6%!important;left:6%!important;width:88%!important;max-width:88%!important}
+  .pawomi-story-banner .pawomi-story-copy h2{font-size:clamp(33px,8vw,45px)!important}
+  .pawomi-story-banner .pawomi-story-description{top:33%!important;left:6%!important;right:auto!important;width:86%!important;max-width:86%!important}
+  .pawomi-story-banner .pawomi-story-illustration img.story-hills{height:29%!important}
+  .pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:6%!important;width:92%!important;height:52%!important}
+  .pawomi-story-banner .heart-one{top:5%!important;left:79%!important}
+  .pawomi-story-banner .heart-two{top:45%!important;right:8%!important}
+}
