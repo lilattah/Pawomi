@@ -96,3 +96,21 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .promo-adventure .promo-cat{width:57%!important;max-width:57%!important;bottom:0;right:-3%;height:75%!important}
 .promo-adventure .promo-sun{position:absolute;z-index:1;top:12px;right:35px;font-size:68px;color:#ffac20;line-height:1}
 @media(max-width:700px){.promo.promo-adventure{grid-template-columns:1fr;min-height:0}.promo-adventure>div:first-child{padding:30px 27px 42px}.promo-adventure>div:first-child::before{inset:0;clip-path:polygon(0 0,100% 0,100% 90%,90% 94%,75% 91%,60% 97%,40% 92%,20% 97%,0 93%)}.promo-adventure h2{font-size:clamp(2.3rem,9vw,3.5rem)}.promo-adventure .promo-adventure-art{min-height:255px}.promo-adventure .promo-dog{height:100%!important}.promo-adventure .promo-cat{height:80%!important}}
+
+/* Smooth organic wave between collection copy and illustration */
+.promo-adventure>div:first-child::before{
+  clip-path:none!important;
+  inset:0 -74px 0 0;
+  border-radius:0;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 600' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 0 H620 C690 72 595 125 630 200 C675 284 585 340 628 414 C681 502 610 553 638 600 H0 Z'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 700 600' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 0 H620 C690 72 595 125 630 200 C675 284 585 340 628 414 C681 502 610 553 638 600 H0 Z'/%3E%3C/svg%3E");
+  -webkit-mask-size:100% 100%;mask-size:100% 100%;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+}
+@media(max-width:700px){
+ .promo-adventure>div:first-child::before{
+  inset:0 0 -32px 0;
+  -webkit-mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 0 H600 V342 C515 390 451 329 355 362 C260 400 178 338 85 370 L0 354 Z'/%3E%3C/svg%3E");
+  mask-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 600 400' preserveAspectRatio='none'%3E%3Cpath fill='white' d='M0 0 H600 V342 C515 390 451 329 355 362 C260 400 178 338 85 370 L0 354 Z'/%3E%3C/svg%3E");
+ }
+}
