@@ -97,7 +97,7 @@
       "settings": {}
     },
     "s5": {
-      "type": "pawomi-newsletter",
+      "type": "pawomi-story-banner",
       "settings": {}
     }
   },
