@@ -66,3 +66,17 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
   .hero>.wrap{width:min(1200px,calc(100% - 28px))}
   .hero .hero-grid{grid-template-columns:1fr;min-height:360px;gap:0}
 }
+
+/* Hero layout hotfix v1.4: ensure wrap stays centered even with .hero-grid width rules */
+.hero > .wrap.hero-grid,
+.hero .wrap.hero-grid{
+  width:min(1200px, calc(100% - 48px));
+  max-width:1200px;
+  margin-inline:auto;
+  box-sizing:border-box;
+}
+.hero .hero-grid > div:first-child{min-width:0}
+.hero{background-image:url('./banner.png');background-position:center;background-size:cover;background-repeat:no-repeat}
+@media (max-width:600px){
+ .hero > .wrap.hero-grid,.hero .wrap.hero-grid{width:calc(100% - 28px);max-width:1200px;margin-inline:auto}
+}
