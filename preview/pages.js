@@ -19,8 +19,24 @@ let items=P.filter(p=>page==='kopek'?p.animal==='kopek':page==='kedi'?p.animal==
 const cat=params.get('category');if(cat)items=items.filter(p=>p.category===cat);
 if(['kopek','kedi'].includes(page))main.innerHTML='<div class="pw-hero"><div>'+intro(name,'Patili dostların günlük maceraları için seçimler.')+'</div><img src="./pawomi-'+(page==='kopek'?'dog':'cat')+'.png" alt=""></div>';
 else main.innerHTML=intro(name,'Pawomi koleksiyonlarını ve ürünlerini keşfet.');
-main.innerHTML+='<div class="pw-toolbar"><div class="pw-categories">'+chips+'</div><label>Sırala <select id="pw-sort"><option value="">Önerilen</option><option value="asc">Artan fiyat</option><option value="desc">Azalan fiyat</option></select></label></div><div id="pw-products">'+grid(items)+'</div>';
-const sel=document.getElementById('pw-sort');sel.onchange=()=>{items.sort((a,b)=>sel.value==='asc'?a.price-b.price:sel.value==='desc'?b.price-a.price:a.id-b.id);document.getElementById('pw-products').innerHTML=grid(items)};
+const pageSize=page==='urunler'?3:3;let visibleCount=Math.min(pageSize,items.length);
+function paintCatalog(){
+ const visible=items.slice(0,visibleCount),remaining=items.length-visibleCount;
+ document.getElementById('pw-products').innerHTML=grid(visible)+
+ (remaining>0?'<div class="pw-load-more-wrap"><p class="pw-product-count">'+visible.length+' / '+items.length+' ürün gösteriliyor</p><button type="button" class="pw-btn pw-load-more" id="pw-load-more">Daha Fazla Ürün Yükle ↓</button></div>':
+ '<p class="pw-product-count" aria-live="polite">'+visible.length+' ürün gösteriliyor</p>');
+ const loadMore=document.getElementById('pw-load-more');
+ if(loadMore)loadMore.addEventListener('click',()=>{
+   const old=visibleCount;visibleCount=Math.min(visibleCount+pageSize,items.length);
+   paintCatalog();
+   const cards=document.querySelectorAll('#pw-products .pw-product');
+   const next=cards[old];if(next){next.classList.add('pw-new-product');next.scrollIntoView({block:'nearest',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})}
+ });
+}
+main.innerHTML+='<div class="pw-toolbar"><div class="pw-categories">'+chips+'</div><label>Sırala <select id="pw-sort"><option value="">Önerilen</option><option value="asc">Artan fiyat</option><option value="desc">Azalan fiyat</option></select></label></div><div id="pw-products"></div>';
+const sel=document.getElementById('pw-sort');
+sel.onchange=()=>{items.sort((a,b)=>sel.value==='asc'?a.price-b.price:sel.value==='desc'?b.price-a.price:a.id-b.id);visibleCount=Math.min(pageSize,items.length);paintCatalog()};
+paintCatalog();
 }
 function product(){const p=P.find(p=>p.id===id);if(!p){main.innerHTML=intro('Ürün bulunamadı');return}document.title=p.name+' — Pawomi';main.innerHTML='<div class="pw-detail"><img src="./'+p.photo+'" alt="'+p.name+'"><div>'+intro(p.name,'Patili dostların günlük maceraları için.')+'<p class="pw-price">'+fmt(p.price)+'</p><p class="pw-note">Bu ürün ve fiyat, tasarım önizlemesi için örnek içeriktir.</p><label>Adet <input type="number" min="1" max="99" id="qty" value="1" style="width:75px"></label><p><button class="pw-btn" data-add="'+p.id+'">Sepete Ekle ♡</button> <button class="pw-fav" data-fav="'+p.id+'" aria-pressed="'+favorites.includes(p.id)+'">♡</button></p><div class="pw-faq"><details open><summary>Ürün detayları</summary><p>Ürün açıklamaları mağaza açılmadan önce tamamlanacak.</p></details><details><summary>Beden rehberi</summary><a href="'+url('beden-rehberi')+'">Beden rehberini incele →</a></details><details><summary>Kargo & iade</summary><a href="'+url('kargo-iade')+'">Kargo ve iadeyi incele →</a></details></div></div></div>'}
 function basket(){main.innerHTML=intro('Sepetim ♡','Patili mutluluklar burada birikiyor!');const list=P.filter(p=>cart[p.id]);let total=0;main.innerHTML+=list.length?'<div class="pw-panel">'+list.map(p=>{const q=Number(cart[p.id])||0;total+=q*p.price;return '<div class="pw-item"><a href="'+url('urun','&id='+p.id)+'"><img src="./'+p.photo+'" alt=""></a><div><b>'+p.name+'</b><p>'+fmt(p.price)+'</p></div><div><button class="pw-btn secondary" data-minus="'+p.id+'">−</button> '+q+' <button class="pw-btn secondary" data-add="'+p.id+'">+</button></div><button class="pw-btn secondary" data-remove="'+p.id+'">Sil</button></div>'}).join('')+'<h2>Toplam: '+fmt(total)+'</h2><a class="pw-btn" href="'+url('odeme')+'">Ödemeye Devam Et →</a></div>':'<div class="pw-panel"><h2>Sepetin henüz boş</h2><a class="pw-btn" href="'+url('urunler')+'">Alışverişe Başla →</a></div>'}
