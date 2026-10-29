@@ -187,3 +187,13 @@ section:has(> .promo-adventure){position:relative;isolation:isolate}
 .promo-decor-4{bottom:-1%;right:8%;width:70px;transform:rotate(-16deg)}
 .promo-decor-5{bottom:12%;left:-1%;width:62px;transform:rotate(-8deg)}
 @media(max-width:700px){.promo-floating-assets{inset:-18px -10px}.promo-float-decor{max-width:55px;max-height:55px}.promo-decor-1{width:50px;top:51%;right:2%}.promo-decor-2{width:40px;left:80%;top:0}.promo-decor-3{width:42px;top:57%;right:62%}.promo-decor-4{width:46px;bottom:0}.promo-decor-5{width:38px;bottom:43%}}
+
+/* Promo decorative asset placement refinement */
+.promo-floating-assets .promo-decor-1{width:108px;max-width:108px;top:-7%;right:-1%;transform:rotate(10deg)}
+.promo-floating-assets .promo-decor-3{width:76px;max-width:76px;top:16%;right:30%;transform:rotate(8deg)}
+.promo-floating-assets .promo-decor-2{width:68px;max-width:68px;top:-10%;left:49%;transform:rotate(-12deg)}
+@media(max-width:700px){
+ .promo-floating-assets .promo-decor-1{width:70px;max-width:70px;top:48%;right:-2%}
+ .promo-floating-assets .promo-decor-3{width:54px;max-width:54px;top:61%;right:28%}
+ .promo-floating-assets .promo-decor-2{width:48px;max-width:48px;top:-4%;left:76%}
+}
