@@ -60,7 +60,7 @@ function boot(){
      // Fur-filled pixels seed a bounded contour expansion preserving ink outlines.
      for(const i of biggest)mask[i]=1;
      // Also keep original colored pixels close to the main character; limbs may disconnect.
-     const seed=new Uint8Array(n);for(const i of biggest)seed[i]=1;
+     const seed=new Uint8Array(n);for(let i=0;i<n;i++)if(core[i])seed[i]=1;
      const radius=Math.max(10,Math.round(cw*.065));
      const horiz=new Uint8Array(n);
      for(let y=0;y<ch;y++){let count=0;for(let x=0;x<cw;x++){
