@@ -45,3 +45,10 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .promo-photo img{object-fit:contain;padding:12px}
 @media(max-width:900px){.pawomi-hero-pair{height:300px}}
 @media(max-width:600px){.pawomi-hero-pair{height:225px}.pawomi-hero-pair img:first-child{width:73%}.pawomi-hero-pair img:last-child{width:55%}.collection-tile img.collection-character{height:160px;max-height:160px}}
+
+/* User-uploaded Pawomi banner used as the hero background */
+.hero{background-image:linear-gradient(90deg,rgba(33,19,17,.30) 0%,rgba(33,19,17,.08) 55%,transparent 100%),url('./banner.png');background-position:center center;background-size:cover;background-repeat:no-repeat;min-height:460px;display:flex;align-items:center}
+.hero .hero-grid{width:100%;min-height:390px}
+.hero .hero-visual{visibility:hidden;pointer-events:none}
+.hero h1,.hero .eyebrow,.hero p{ text-shadow:0 2px 15px rgba(24,12,12,.28)}
+@media(max-width:600px){.hero{min-height:420px;background-position:60% center}.hero .hero-grid{min-height:360px;align-items:center}.hero .hero-visual{display:none}}
