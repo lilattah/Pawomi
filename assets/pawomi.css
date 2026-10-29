@@ -289,3 +289,14 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
  .pawomi-inspiration .pawomi-duo-pet{transition:none!important}
  .pawomi-inspiration:hover .pawomi-duo-pet{transform:none!important;filter:none}
 }
+
+/* Pawomi story: layered hills behind foreground people and pets */
+.pawomi-story-banner{overflow:hidden;isolation:isolate}
+.pawomi-story-illustration{position:relative;isolation:isolate}
+.pawomi-story-illustration img.story-hills{position:absolute;inset:0 -12% -5% -15%;width:127%;height:106%;max-width:none;object-fit:cover;object-position:center bottom;z-index:0;pointer-events:none;transition:transform .65s cubic-bezier(.22,1,.36,1)}
+.pawomi-story-illustration img.story-embrace{z-index:2;transform:scale(1);transform-origin:bottom center;transition:transform .65s cubic-bezier(.22,1,.36,1);will-change:transform}
+.pawomi-story-banner:hover .pawomi-story-illustration img.story-embrace{transform:scale(1.085)}
+.pawomi-story-banner:hover .pawomi-story-illustration img.story-hills{transform:scale(1.035)}
+.pawomi-story-banner:hover .story-heart{transform:translateY(-5px)}
+.story-heart{transition:transform .45s ease}
+@media(prefers-reduced-motion:reduce){.pawomi-story-illustration img.story-hills,.pawomi-story-illustration img.story-embrace,.story-heart{transition:none!important}.pawomi-story-banner:hover .pawomi-story-illustration img.story-embrace,.pawomi-story-banner:hover .pawomi-story-illustration img.story-hills{transform:none}}
