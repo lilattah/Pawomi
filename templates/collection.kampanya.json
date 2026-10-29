@@ -1,11 +1,11 @@
 {
   "sections": {
-    "s0": {
-      "type": "pawomi-main-collection",
+    "main": {
+      "type": "pawomi-main-campaign",
       "settings": {}
     }
   },
   "order": [
-    "s0"
+    "main"
   ]
 }
