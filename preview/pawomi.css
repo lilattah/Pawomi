@@ -542,3 +542,13 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 @media(max-width:600px){
   .pawomi-story-banner .pawomi-story-illustration img.story-hills{bottom:-42px!important}
 }
+
+/* Keep right-hand heart clear of story description */
+.pawomi-story-banner .heart-two{
+  right:26%!important;
+  left:auto!important;
+  top:7%!important;
+}
+@media(max-width:600px){
+ .pawomi-story-banner .heart-two{right:8%!important;top:43%!important}
+}
