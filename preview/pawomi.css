@@ -566,9 +566,9 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 /* Site-wide two-state Pawomi hand cursor — desktop precision pointers only */
 @media (hover:hover) and (pointer:fine){
  html,body,body *{cursor:none!important}
- .pawomi-hand-cursor{--cursor-image:url('./pawomi-cursors.png');position:fixed;left:-200px;top:-200px;width:52px;height:52px;z-index:2147483646;pointer-events:none;background-image:var(--cursor-image);background-size:200% 100%;background-repeat:no-repeat;background-position:left center;transform:translate(-39%,-5%);opacity:0;transition:opacity .10s ease}
+ .pawomi-hand-cursor{--cursor-image:url('./pawomi-cursors.png');position:fixed;left:-200px;top:-200px;width:52px;height:52px;z-index:2147483646;pointer-events:none;background-image:var(--cursor-image);background-size:200% 100%;background-repeat:no-repeat;background-position:left center;transform:translate(-39%,-5%) rotate(-24deg);transform-origin:35% 12%;opacity:0;transition:opacity .10s ease}
  .pawomi-hand-cursor.is-visible{opacity:1}
- .pawomi-hand-cursor.is-clicking{background-position:right center;transform:translate(-39%,-5%) scale(.91)}
+ .pawomi-hand-cursor.is-clicking{background-position:right center;transform:translate(-39%,-5%) rotate(-24deg) scale(.91)}
  .pawomi-hand-cursor.is-text{opacity:0}
  input,textarea,[contenteditable="true"]{cursor:text!important}
 }
