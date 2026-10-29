@@ -35,3 +35,13 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .category:hover .cat-icon img{transform:translateY(-4px) rotate(-5deg) scale(1.08)}
 .category{min-height:142px;gap:3px}
 @media(max-width:600px){.cat-icon{height:62px}.cat-icon img{width:62px;height:62px}.category{min-height:116px}}
+
+/* Pawomi uploaded PNG artwork: responsive, transparent assets */
+.pawomi-hero-pair{width:100%;height:350px;position:relative;display:block}
+.pawomi-hero-pair img{position:absolute;display:block;object-fit:contain;max-width:none;filter:drop-shadow(0 14px 13px #41000f18)}
+.pawomi-hero-pair img:first-child{width:78%;height:95%;right:-1%;bottom:0;transform:rotate(-2deg)}
+.pawomi-hero-pair img:last-child{width:58%;height:70%;left:-4%;bottom:-4%;transform:rotate(4deg)}
+.collection-tile img.collection-character{width:49%;max-width:49%;max-height:220px;height:205px;object-fit:contain;object-position:center}
+.promo-photo img{object-fit:contain;padding:12px}
+@media(max-width:900px){.pawomi-hero-pair{height:300px}}
+@media(max-width:600px){.pawomi-hero-pair{height:225px}.pawomi-hero-pair img:first-child{width:73%}.pawomi-hero-pair img:last-child{width:55%}.collection-tile img.collection-character{height:160px;max-height:160px}}
