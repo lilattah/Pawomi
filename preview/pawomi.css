@@ -118,3 +118,36 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 /* Collection heading colors matched to approved reference */
 .two-cols > .collection-tile:first-child h2{color:#7F1825}
 .two-cols > .collection-tile:nth-child(2) h2{color:#183B65}
+
+
+/* Pawomi featured product carousel */
+.featured-products .section-heading{margin-bottom:18px}
+.featured-products .section-heading h2{font-size:clamp(1.9rem,3vw,2.8rem);margin:0}
+.featured-products .section-heading>a{font-weight:600}
+.featured-products .section-heading>a::after{content:'  →'}
+.featured-carousel-controls{display:flex;align-items:center;gap:8px}
+.featured-carousel-arrow{display:grid;place-items:center;width:40px;height:40px;border-radius:50%;border:1px solid #e8dbce;background:white;color:#171515;font-size:24px;line-height:1;transition:background .2s,transform .2s}
+.featured-carousel-arrow:hover:not(:disabled){background:#ffe6bc;transform:translateY(-2px)}
+.featured-carousel-arrow:disabled{opacity:.35;cursor:default}
+.featured-carousel{overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain}
+.featured-carousel::-webkit-scrollbar{display:none}
+.featured-carousel .product-grid{display:flex;gap:14px;align-items:stretch}
+.featured-carousel .product-card{position:relative;flex:0 0 calc((100% - 42px)/4);min-width:0;scroll-snap-align:start;border:0;border-radius:20px;background:#fff;overflow:hidden;display:flex;flex-direction:column}
+.featured-carousel .product-photo{height:220px;border-radius:18px 18px 0 0;overflow:hidden;display:grid;place-items:center}
+.featured-carousel .product-photo img{object-fit:contain;padding:13px}
+.featured-carousel .product-info{padding:13px 14px 15px;display:flex;flex:1;flex-direction:column;gap:6px}
+.featured-carousel .product-info .eyebrow{display:none}
+.featured-carousel .product-name{font-family:var(--font-body,'Poppins',sans-serif);font-weight:600;font-size:13px;letter-spacing:-.01em;line-height:1.4;min-height:36px;color:#1a1715}
+.featured-carousel .product-bottom{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:auto}
+.featured-carousel .price{font-size:18px;font-weight:700;margin:0;white-space:nowrap}
+.featured-carousel .price s{font-size:11px}
+.featured-carousel .product-cart{width:40px;height:40px;display:grid;place-items:center;padding:0;border:0;background:#cb071c;color:#fff;border-radius:50%;flex-shrink:0}
+.featured-carousel .product-cart:hover{background:#a60316;transform:translateY(-2px)}
+.featured-carousel .product-cart svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.featured-carousel .product-favorite{position:absolute;top:11px;right:11px;z-index:2;display:grid;place-items:center;width:37px;height:37px;border:0;border-radius:50%;background:#fff;color:#242424}
+.featured-carousel .product-favorite svg{width:21px;height:21px;stroke:currentColor;stroke-width:2;fill:none}
+.featured-carousel .product-favorite[aria-pressed="true"]{color:#cb071c}
+.featured-carousel .product-favorite[aria-pressed="true"] svg{fill:currentColor}
+.featured-products .featured-search{margin-bottom:16px}
+@media(max-width:900px){.featured-carousel .product-card{flex-basis:calc((100% - 28px)/3)}}
+@media(max-width:650px){.featured-carousel .product-card{flex-basis:calc((100% - 12px)/2)}.featured-carousel .product-grid{gap:12px}.featured-carousel .product-photo{height:170px}.featured-carousel .price{font-size:15px}.featured-carousel-controls{gap:5px}.featured-carousel-arrow{width:34px;height:34px}.featured-products .section-heading h2{font-size:1.6rem}}
