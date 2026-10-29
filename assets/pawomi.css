@@ -573,3 +573,9 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
  input,textarea,[contenteditable="true"]{cursor:text!important}
 }
 @media (hover:none),(pointer:coarse){.pawomi-hand-cursor{display:none!important}}
+
+/* Render the custom hand cursor above native modal dialog top layers. */
+@media (hover:hover) and (pointer:fine){
+ .pawomi-hand-cursor[popover]{position:fixed!important;inset:auto!important;margin:0!important;padding:0!important;border:0!important;background-color:transparent!important;box-shadow:none!important;overflow:visible!important;color:transparent!important;pointer-events:none!important}
+ .pawomi-hand-cursor[popover]:popover-open{display:block}
+}
