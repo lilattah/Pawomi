@@ -52,3 +52,17 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .hero .hero-visual{visibility:hidden;pointer-events:none}
 .hero h1,.hero .eyebrow,.hero p{ text-shadow:0 2px 15px rgba(24,12,12,.28)}
 @media(max-width:600px){.hero{min-height:420px;background-position:60% center}.hero .hero-grid{min-height:360px;align-items:center}.hero .hero-visual{display:none}}
+
+
+/* Pawomi hero alignment and sticky navigation correction */
+.site-header{position:sticky;top:0;z-index:1000}
+.hero{position:relative;isolation:isolate;width:100%;margin:0;padding:40px 0 65px;display:block;background-image:linear-gradient(90deg,rgba(33,19,17,.25) 0%,rgba(33,19,17,.05) 58%,transparent 100%),url('./banner.png');background-size:cover;background-position:center center;background-repeat:no-repeat}
+.hero>.wrap{width:min(1200px,calc(100% - 48px));margin-left:auto;margin-right:auto}
+.hero .hero-grid{display:grid;grid-template-columns:1fr 1fr;align-items:center;min-height:370px;gap:30px;width:100%}
+.hero .hero-grid>div:first-child{position:relative;z-index:2;min-width:0}
+.hero h1{max-width:650px}
+@media(max-width:600px){
+  .hero{padding:20px 0 40px;min-height:420px;background-position:60% center}
+  .hero>.wrap{width:min(1200px,calc(100% - 28px))}
+  .hero .hero-grid{grid-template-columns:1fr;min-height:360px;gap:0}
+}
