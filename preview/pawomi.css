@@ -28,3 +28,10 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .brand{display:inline-flex;align-items:center;flex-shrink:0;line-height:0}
 .brand-logo{display:block;width:clamp(142px,15vw,192px);height:auto;max-height:46px;object-fit:contain}
 @media(max-width:600px){.brand-logo{width:142px;max-height:36px}}
+
+/* Pawomi illustrated category icons */
+.cat-icon{display:flex;align-items:center;justify-content:center;width:100%;height:76px;margin-bottom:6px}
+.cat-icon img{width:76px;height:76px;max-width:100%;object-fit:contain;display:block;transition:transform 360ms cubic-bezier(.22,1,.36,1)}
+.category:hover .cat-icon img{transform:translateY(-4px) rotate(-5deg) scale(1.08)}
+.category{min-height:142px;gap:3px}
+@media(max-width:600px){.cat-icon{height:62px}.cat-icon img{width:62px;height:62px}.category{min-height:116px}}
