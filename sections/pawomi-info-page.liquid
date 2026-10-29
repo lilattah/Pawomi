@@ -1,0 +1,23 @@
+<section class="wrap section-pad pawomi-info-page">
+<div class="pawomi-page-eyebrow">PAWOMI / {{ page.title | upcase }}</div><h1>{{ page.title }}</h1>
+{% case page.handle %}
+{% when 'sss' %}
+<p class="pawomi-lead">Merak ettiklerin burada! Sipariş ve patili alışveriş hakkında sorular.</p><div class="pawomi-faq">
+{% assign questions = 'Siparişimi nasıl takip edebilirim?|Hangi kargo firmasıyla çalışıyorsunuz?|İade süreci nasıl ilerliyor?|Ürün bedenini nasıl seçebilirim?|Ürünler hakkında nasıl bilgi alabilirim?' | split: '|' %}
+{% for q in questions %}<details><summary>{{ q }} <span aria-hidden="true">＋</span></summary><p>{% case forloop.index %}{% when 1 %}Sipariş bilgilerini hesabındaki Siparişler bölümünden görüntüleyebilirsin.{% when 2 %}Güncel teslimat seçenekleri ödeme aşamasında gösterilir.{% when 3 %}İade koşullarını Kargo, Teslimat ve İade sayfamızdan inceleyebilirsin.{% when 4 %}Beden rehberimizden ölçü tablosuna ulaşabilirsin.{% else %}İletişim sayfamızdan bize yazabilirsin.{% endcase %}</p></details>{% endfor %}</div>
+{% when 'beden-rehberi' %}
+<p class="pawomi-lead">Doğru ölçü, mutlu patiler! Ürünün açıklamasındaki ölçülere göre seçim yap.</p>
+<div class="pawomi-benefit-grid"><article><span>📏</span><h3>Boyun çevresi</h3><p>Mezuranın altına iki parmak girecek kadar rahatlık bırak.</p></article><article><span>🐕</span><h3>Göğüs çevresi</h3><p>Göğsün en geniş noktasından ölçüm yap.</p></article><article><span>♡</span><h3>Konfor kontrolü</h3><p>Tasma ve göğüslük ürünlerinin kendi beden tablosunu esas al.</p></article></div>
+{% when 'kargo-iade' %}
+<div class="pawomi-benefit-grid"><article><span>🚚</span><h3>Kargo</h3><p>Teslimat yöntemleri ve ücretleri ödeme adımında gösterilir.</p></article><article><span>⏱</span><h3>Teslimat</h3><p>Ürün bazında belirtilen hazırlık ve taşıma koşulları geçerlidir.</p></article><article><span>↩</span><h3>İade ve değişim</h3><p>Güncel koşullar için aşağıdaki mağaza metnini inceleyin.</p></article></div>
+{% when 'hikayemiz' %}
+<div class="pawomi-story-about"><div><p class="pawomi-lead">Mutlu Patiler, Güzel Yarınlar.</p><h2>Küçük detaylar, büyük mutluluklar</h2><p>Pawomi, patili dostlarımızın yaşamına renk, oyun ve sevgi katmak için tasarlanıyor.</p></div><img src="{{ 'story-embrace.png' | asset_url }}" loading="lazy" alt="Birlikte mutlu patiler"></div>
+{% when 'gizlilik' %}<p class="pawomi-lead">Kişisel veriler ve gizlilik hakkında bilgilendirme.</p>
+{% when 'mesafeli-satis' %}<p class="pawomi-lead">Mesafeli satış sözleşmesi hakkında bilgilendirme.</p>
+{% when 'on-bilgilendirme' %}<p class="pawomi-lead">Sipariş öncesi bilgilendirme.</p>
+{% when 'siparis-takip' %}<div class="pawomi-benefit-grid"><article><span>📦</span><h3>Siparişini kontrol et</h3><p>Hesabından sipariş durumunu ve mevcut takip bilgilerini görebilirsin.</p><a class="btn small" href="{{ routes.account_url }}">Hesabıma Git →</a></article></div>
+{% endcase %}
+<div class="rte pawomi-rich-content">{{ page.content }}</div>
+{% if page.content == blank %}<p class="pawomi-content-note">Bu sayfanın ayrıntılı içerikleri Shopify yönetim panelinden tamamlanabilir.</p>{% endif %}
+</section>
+{% schema %}{"name":"Pawomi bilgi ve rehber","settings":[]}{% endschema %}
