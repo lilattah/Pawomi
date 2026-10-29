@@ -19,64 +19,50 @@ function boot(){
   const cols=6,rows=4;
   function resize(){const rect=hero.getBoundingClientRect();w=Math.max(1,rect.width);h=Math.max(1,rect.height);dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0)}
   function framesFromSheet(image){
-   // Layout measured on the user's 1227x777 design canvas.
-   // Source image is first mapped to that coordinate system.
-   // Row order in the Pawomi sheets: right, left, up, down.
-   const DESIGN_W=1227,DESIGN_H=777,COLS=6,ROWS=4;
-   const specs=[
-    {direction:'right',w:212,h:197},
-    {direction:'left',w:212,h:197},
-    {direction:'up',w:160,h:210},
-    {direction:'down',w:160,h:210}
-   ];
-   const base=document.createElement('canvas');
-   base.width=DESIGN_W;base.height=DESIGN_H;
-   const bg=base.getContext('2d',{willReadFrequently:true});
-   bg.drawImage(image,0,0,DESIGN_W,DESIGN_H);
-   const pitchX=DESIGN_W/COLS,pitchY=DESIGN_H/ROWS;
-   const output=[];
-   for(let row=0;row<ROWS;row++){
-    const frames=[],spec=specs[row];
-    for(let col=0;col<COLS;col++){
-     const centerX=(col+.5)*pitchX,centerY=(row+.5)*pitchY;
-     const sourceX=Math.round(centerX-spec.w/2),sourceY=Math.round(centerY-spec.h/2);
-     const frame=document.createElement('canvas');
-     frame.width=spec.w;frame.height=spec.h;
+   // The uploaded source files already have real alpha transparency.
+   // Never recolor or filter black pixels: they are the character's outlines.
+   const sw=image.naturalWidth,sh=image.naturalHeight,output=[];
+   for(let row=0;row<4;row++){
+    const frames=[];
+    for(let col=0;col<6;col++){
+     const x0=Math.round(col*sw/6),x1=Math.round((col+1)*sw/6);
+     const y0=Math.round(row*sh/4),y1=Math.round((row+1)*sh/4);
+     const W=x1-x0,H=y1-y0,frame=document.createElement('canvas');
+     frame.width=W;frame.height=H;
      const g=frame.getContext('2d',{willReadFrequently:true});
-     // The requested crops can be wider/taller than the cell pitch.
-     // Strict clipping prevents an adjacent frame from appearing in this frame.
-     const safeX=Math.max(0,Math.ceil(col*pitchX-sourceX));
-     const safeY=Math.max(0,Math.ceil(row*pitchY-sourceY));
-     const safeRight=Math.min(spec.w,Math.floor((col+1)*pitchX-sourceX));
-     const safeBottom=Math.min(spec.h,Math.floor((row+1)*pitchY-sourceY));
-     const width=Math.max(0,safeRight-safeX),height=Math.max(0,safeBottom-safeY);
-     if(width&&height){
-      g.drawImage(base,sourceX+safeX,sourceY+safeY,width,height,safeX,safeY,width,height);
+     g.drawImage(image,x0,y0,W,H,0,0,W,H);
+     const sample=g.getImageData(0,0,W,H),data=sample.data,count=W*H;
+     const seen=new Uint8Array(count),labels=new Int32Array(count);
+     const queue=new Int32Array(count);
+     let selected=0,largest=0,component=0;
+     // Connected alpha components, not color classification. This keeps
+     // every black stroke INSIDE the dog/cat including eye and nose ink.
+     for(let i=0;i<count;i++){
+      if(seen[i]||data[i*4+3]<95)continue;
+      component++;let head=0,tail=1;queue[0]=i;seen[i]=1;labels[i]=component;
+      while(head<tail){
+       const v=queue[head++],xx=v%W,yy=(v/W)|0;
+       const n0=xx>0?v-1:-1,n1=xx<W-1?v+1:-1,n2=yy>0?v-W:-1,n3=yy<H-1?v+W:-1;
+       for(const n of [n0,n1,n2,n3]){
+        if(n>=0&&!seen[n]&&data[n*4+3]>=95){seen[n]=1;labels[n]=component;queue[tail++]=n}
+       }
+      }
+      if(tail>largest){largest=tail;selected=component}
      }
-     // Remove the original dark/chessboard background only where connected
-     // to the outer edge; dark ink lines enclosed by fur remain untouched.
-     let imgData;
-     try{imgData=g.getImageData(0,0,spec.w,spec.h)}catch{frames.push(frame);continue}
-     const d=imgData.data,W=spec.w,H=spec.h,n=W*H;
-     const visited=new Uint8Array(n),queue=new Int32Array(n);
-     let head=0,tail=0;
-     const background=(i)=>{
-      const p=i*4,r=d[p],green=d[p+1],blue=d[p+2],a=d[p+3];
-      if(a<8)return true;
-      // Neutral dark checkerboard or background, not colorful collar/fur.
-      const max=Math.max(r,green,blue),min=Math.min(r,green,blue);
-      return max<145&&(max-min)<28;
-     };
-     function seed(i){if(i>=0&&i<n&&!visited[i]&&background(i)){visited[i]=1;queue[tail++]=i}}
-     for(let x=0;x<W;x++){seed(x);seed((H-1)*W+x)}
-     for(let y=0;y<H;y++){seed(y*W);seed(y*W+W-1)}
-     while(head<tail){
-      const i=queue[head++],x=i%W,y=(i/W)|0;
-      if(x>0)seed(i-1);if(x<W-1)seed(i+1);
-      if(y>0)seed(i-W);if(y<H-1)seed(i+W);
+     // Keep the largest connected character plus its antialiased fringe.
+     // The tiny disconnected fragments from neighboring frames are rejected.
+     const keep=new Uint8Array(count);
+     for(let i=0;i<count;i++)if(labels[i]===selected)keep[i]=1;
+     const antialias=new Uint8Array(keep);
+     for(let i=0;i<count;i++)if(keep[i]){
+      const x=i%W,y=(i/W)|0;
+      for(let dy=-2;dy<=2;dy++)for(let dx=-2;dx<=2;dx++){
+       const nx=x+dx,ny=y+dy;
+       if(nx>=0&&nx<W&&ny>=0&&ny<H)antialias[ny*W+nx]=1;
+      }
      }
-     for(let i=0;i<n;i++)if(visited[i])d[i*4+3]=0;
-     g.putImageData(imgData,0,0);
+     for(let i=0;i<count;i++)if(!antialias[i])data[i*4+3]=0;
+     g.putImageData(sample,0,0);
      frames.push(frame);
     }
     output.push(frames);
@@ -137,6 +123,7 @@ function boot(){
     const frame=moving?Math.floor(a.phase)%6:0;
     const tile=a.frames[a.row]?.[frame];if(!tile)return;
     const aspect=tile.height/tile.width,dh=size*aspect,x=a.x*w,y=a.y*h;
+    ctx.fillStyle='#CD071B';ctx.fillRect(x-size/2-3,y-dh*.7-3,size+6,dh+6);
     ctx.fillStyle='rgba(80,0,0,.13)';ctx.beginPath();ctx.ellipse(x,y+dh*.32,size*.30,size*.055,0,0,Math.PI*2);ctx.fill();
     ctx.drawImage(tile,x-size/2,y-dh*.7,size,dh);
    });
