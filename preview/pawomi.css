@@ -300,3 +300,17 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
 .pawomi-story-banner:hover .story-heart{transform:translateY(-5px)}
 .story-heart{transition:transform .45s ease}
 @media(prefers-reduced-motion:reduce){.pawomi-story-illustration img.story-hills,.pawomi-story-illustration img.story-embrace,.story-heart{transition:none!important}.pawomi-story-banner:hover .pawomi-story-illustration img.story-embrace,.pawomi-story-banner:hover .pawomi-story-illustration img.story-hills{transform:none}}
+
+/* Story forest artwork is now the only landscape, edge to edge */
+.pawomi-story-banner{position:relative;isolation:isolate;background:#fff2df}
+.pawomi-story-banner::before{display:none!important;content:none!important}
+.pawomi-story-illustration{position:static!important;isolation:auto!important}
+.pawomi-story-illustration img.story-hills{
+ position:absolute!important;inset:0!important;
+ width:100%!important;height:100%!important;max-width:none!important;
+ object-fit:fill!important;object-position:center bottom!important;
+ z-index:-1!important;pointer-events:none;
+}
+.pawomi-story-illustration img.story-embrace{z-index:2!important}
+.pawomi-story-copy,.pawomi-story-description{position:relative;z-index:3}
+@media(max-width:850px){.pawomi-story-illustration img.story-hills{inset:0!important;width:100%!important;height:100%!important}}
