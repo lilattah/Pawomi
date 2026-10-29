@@ -1,0 +1,13 @@
+{
+  "type": "header",
+  "name": "Üst menü",
+  "sections": {
+    "header": {
+      "type": "pawomi-header",
+      "settings": {}
+    }
+  },
+  "order": [
+    "header"
+  ]
+}

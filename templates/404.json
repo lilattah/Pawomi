@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "s0": {
+      "type": "pawomi-main-404",
+      "settings": {}
+    }
+  },
+  "order": [
+    "s0"
+  ]
+}

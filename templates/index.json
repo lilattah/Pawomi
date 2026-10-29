@@ -1,0 +1,112 @@
+{
+  "sections": {
+    "s0": {
+      "type": "pawomi-hero",
+      "settings": {}
+    },
+    "s1": {
+      "type": "pawomi-categories",
+      "settings": {},
+      "blocks": {
+        "cat0": {
+          "type": "category",
+          "settings": {
+            "label": "Mama",
+            "emoji": "🥣"
+          }
+        },
+        "cat1": {
+          "type": "category",
+          "settings": {
+            "label": "Tasma & Kayış",
+            "emoji": "🦮"
+          }
+        },
+        "cat2": {
+          "type": "category",
+          "settings": {
+            "label": "Oyuncak",
+            "emoji": "🧶"
+          }
+        },
+        "cat3": {
+          "type": "category",
+          "settings": {
+            "label": "Bakım",
+            "emoji": "🪮"
+          }
+        },
+        "cat4": {
+          "type": "category",
+          "settings": {
+            "label": "Yatak & Ev",
+            "emoji": "🛏️"
+          }
+        },
+        "cat5": {
+          "type": "category",
+          "settings": {
+            "label": "Sağlık",
+            "emoji": "🐾"
+          }
+        }
+      },
+      "block_order": [
+        "cat0",
+        "cat1",
+        "cat2",
+        "cat3",
+        "cat4",
+        "cat5"
+      ]
+    },
+    "s2": {
+      "type": "pawomi-promo",
+      "settings": {}
+    },
+    "s3": {
+      "type": "pawomi-collection-links",
+      "settings": {},
+      "blocks": {
+        "dog": {
+          "type": "tile",
+          "settings": {
+            "title": "Köpek Koleksiyonu",
+            "subtitle": "Enerjik dostlar için konfor ve stil.",
+            "emoji": "🐕",
+            "background": "#FFC7C1"
+          }
+        },
+        "cat": {
+          "type": "tile",
+          "settings": {
+            "title": "Kedi Koleksiyonu",
+            "subtitle": "Meraklı patiler için sevimli seçimler.",
+            "emoji": "🐈",
+            "background": "#C8E7FA"
+          }
+        }
+      },
+      "block_order": [
+        "dog",
+        "cat"
+      ]
+    },
+    "s4": {
+      "type": "pawomi-featured",
+      "settings": {}
+    },
+    "s5": {
+      "type": "pawomi-newsletter",
+      "settings": {}
+    }
+  },
+  "order": [
+    "s0",
+    "s1",
+    "s2",
+    "s3",
+    "s4",
+    "s5"
+  ]
+}

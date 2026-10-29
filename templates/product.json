@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "s0": {
+      "type": "pawomi-main-product",
+      "settings": {}
+    }
+  },
+  "order": [
+    "s0"
+  ]
+}

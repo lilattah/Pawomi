@@ -1,0 +1,33 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Pawomi Playful Heritage",
+    "theme_author": "Pawomi Studio",
+    "theme_version": "1.0.0",
+    "theme_documentation_url": "https://shopify.dev/docs/storefronts/themes",
+    "theme_support_url": "https://help.shopify.com/"
+  },
+  {
+    "name": "Marka renkleri",
+    "settings": [
+      {
+        "type": "color",
+        "id": "brand_red",
+        "label": "Pawomi kırmızı",
+        "default": "#CD071B"
+      },
+      {
+        "type": "color",
+        "id": "brand_cream",
+        "label": "Sıcak krem",
+        "default": "#FFF4D6"
+      },
+      {
+        "type": "color",
+        "id": "brand_ink",
+        "label": "Siyah",
+        "default": "#161616"
+      }
+    ]
+  }
+]

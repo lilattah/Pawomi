@@ -1,0 +1,13 @@
+{
+  "general": {
+    "search": "Ara",
+    "cart": "Sepet"
+  },
+  "products": {
+    "add_to_cart": "Sepete Ekle",
+    "sold_out": "Tükendi"
+  },
+  "accessibility": {
+    "skip_to_text": "İçeriğe geç"
+  }
+}

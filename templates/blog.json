@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "s0": {
+      "type": "pawomi-main-blog",
+      "settings": {}
+    }
+  },
+  "order": [
+    "s0"
+  ]
+}

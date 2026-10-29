@@ -1,0 +1,11 @@
+{
+  "sections": {
+    "s0": {
+      "type": "pawomi-main-contact",
+      "settings": {}
+    }
+  },
+  "order": [
+    "s0"
+  ]
+}

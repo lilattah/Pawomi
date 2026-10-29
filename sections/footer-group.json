@@ -1,0 +1,13 @@
+{
+  "type": "footer",
+  "name": "Alt menü",
+  "sections": {
+    "footer": {
+      "type": "pawomi-footer",
+      "settings": {}
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}
