@@ -508,3 +508,16 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
    width:100%!important;height:auto!important;
  }
 }
+
+/* Align the visible forest ground edge with the banner floor */
+.pawomi-story-banner .pawomi-story-illustration img.story-hills{
+  bottom:-7%!important;
+  top:auto!important;
+  width:100%!important;
+  height:auto!important;
+  object-fit:contain!important;
+  object-position:center bottom!important;
+}
+@media(max-width:600px){
+  .pawomi-story-banner .pawomi-story-illustration img.story-hills{bottom:-3%!important}
+}
