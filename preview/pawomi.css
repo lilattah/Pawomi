@@ -368,3 +368,21 @@ h1,h2,h3,h4,h5,h6,.section-heading h2,.promo h2,.collection-tile h2,.newsletter 
  .pawomi-story-banner .pawomi-story-illustration img.story-hills{height:31%!important}
  .pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:0!important;width:100%!important;height:46%!important}
 }
+
+
+/* Story reference rebuild v2: one canonical layout, fixed safe text zones */
+.pawomi-story-banner{display:block!important;position:relative!important;height:auto!important;min-height:0!important;aspect-ratio:3.75/1;background:#fff2df!important;border-radius:26px;overflow:hidden!important;isolation:isolate}
+.pawomi-story-banner::before{display:none!important}
+.pawomi-story-banner .pawomi-story-copy{position:absolute!important;left:5.5%!important;top:9%!important;width:34%!important;max-width:34%!important;padding:0!important;margin:0!important;z-index:6!important}
+.pawomi-story-banner .pawomi-story-copy h2{font-family:'Baloo 2',sans-serif!important;font-weight:800!important;font-size:clamp(28px,3.25vw,59px)!important;line-height:.96!important;letter-spacing:-.045em!important;margin:0 0 20px!important;max-width:none!important}
+.pawomi-story-banner .pawomi-story-cta{font-size:clamp(13px,1.15vw,19px);padding:13px 23px!important;white-space:nowrap}
+.pawomi-story-banner .pawomi-story-description{position:absolute!important;top:14%!important;right:4.5%!important;width:18%!important;max-width:18%!important;padding:0!important;margin:0!important;z-index:6!important}
+.pawomi-story-banner .pawomi-story-description p{font-size:clamp(12px,1.17vw,19px)!important;line-height:1.55!important}
+.pawomi-story-banner .pawomi-story-illustration{position:static!important;min-height:0!important}
+.pawomi-story-banner .pawomi-story-illustration img.story-hills{position:absolute!important;top:auto!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;height:44%!important;max-width:none!important;object-fit:fill!important;z-index:0!important}
+.pawomi-story-banner .pawomi-story-illustration img.story-embrace{position:absolute!important;top:auto!important;left:33%!important;bottom:0!important;width:49%!important;height:100%!important;max-width:none!important;object-fit:contain!important;object-position:center bottom!important;z-index:3!important;transform-origin:center bottom}
+.pawomi-story-banner .story-heart{z-index:5!important}
+.pawomi-story-banner .heart-one{position:absolute;left:35%;top:6%}
+.pawomi-story-banner .heart-two{position:absolute;left:auto;right:21%;top:8%}
+@media(max-width:900px){.pawomi-story-banner{aspect-ratio:auto;min-height:420px!important}.pawomi-story-banner .pawomi-story-copy{left:4%!important;width:37%!important;max-width:37%!important}.pawomi-story-banner .pawomi-story-copy h2{font-size:clamp(28px,4vw,43px)!important}.pawomi-story-banner .pawomi-story-description{right:3%!important;width:22%!important;max-width:22%!important}.pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:31%!important;width:53%!important}}
+@media(max-width:600px){.pawomi-story-banner{min-height:650px!important;display:block!important}.pawomi-story-banner .pawomi-story-copy{top:5%!important;left:6%!important;width:90%!important;max-width:90%!important}.pawomi-story-banner .pawomi-story-copy h2{font-size:clamp(32px,8vw,48px)!important;margin-bottom:12px!important}.pawomi-story-banner .pawomi-story-description{top:36%!important;left:6%!important;right:auto!important;width:88%!important;max-width:88%!important}.pawomi-story-banner .pawomi-story-description p{font-size:15px!important}.pawomi-story-banner .pawomi-story-illustration img.story-embrace{left:10%!important;width:88%!important;height:55%!important}.pawomi-story-banner .pawomi-story-illustration img.story-hills{height:32%!important}.pawomi-story-banner .heart-one{left:76%;top:9%}.pawomi-story-banner .heart-two{right:7%;top:44%}}
