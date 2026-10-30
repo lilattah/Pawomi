@@ -41,3 +41,10 @@
 .pw-story-heart{position:absolute;z-index:3;color:#cf0926;font-size:55px;font-weight:800;line-height:1}.pw-heart-one{left:38%;top:10%}.pw-heart-two{right:23%;top:9%}
 @media(max-width:850px){.pw-story-feature{min-height:390px;padding:32px;grid-template-columns:1fr 1fr}.pw-story-description{grid-column:2}.pw-story-embrace{left:20%;width:65%}}
 @media(max-width:550px){.pw-gallery-thumbs{gap:5px}.pw-story-feature{min-height:510px;display:block;padding:25px}.pw-story-copy h2{font-size:34px}.pw-story-embrace{width:100%;height:55%;left:0}.pw-story-description{font-size:14px;max-width:60%;margin-top:18px}.pw-story-hills{bottom:-20px}.pw-heart-one{left:75%;top:15%}.pw-heart-two{display:none}}
+
+/* Shared square product image treatment — all catalog routes including cat and dog. */
+.page-runtime .pw-grid .pw-product > a:has(img){display:block;width:100%;aspect-ratio:1 / 1;overflow:hidden;background:#f8f0e8}
+.page-runtime .pw-grid .pw-product > a > img{display:block;width:100%!important;height:100%!important;aspect-ratio:1 / 1;object-fit:cover;object-position:center}
+/* Retain home hero layout and full-width chase canvas above story and blog pages. */
+body:has(.page-runtime) > .hero.red-section{width:100%;margin:0;min-height:410px}
+@media(max-width:760px){body:has(.page-runtime) > .hero.red-section{min-height:450px}}
