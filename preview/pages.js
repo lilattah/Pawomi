@@ -89,4 +89,9 @@ document.addEventListener('click',e=>{const add=e.target.closest('[data-add]'),m
 document.addEventListener('submit',e=>{if(e.target.id==='pw-contact'){e.preventDefault();alert('Bu önizlemede mesaj gönderilmez.')}});
 const menu=document.querySelector('.menu-toggle');menu?.addEventListener('click',()=>{const nav=document.querySelector('.nav-links');const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open))});
 render();
+if(page==='blog'||page==='hikayemiz'){
+ const banner=document.createElement('div');banner.innerHTML="<section class=\"hero red-section\" data-game-base=\"./\"><div class=\"wrap hero-grid\"><div><p class=\"eyebrow\">PATİLİ DOSTLAR İÇİN</p><h1>DAHA MUTLU<br>YARINLAR</h1><p>Onların mutluluğu, bizim ilhamımız.</p><a class=\"btn cream-btn\" href=\"./page.html?p=urunler\">Alışverişe Başla →</a></div><div class=\"hero-visual\"><div class=\"pawomi-hero-pair\"><img src=\"./pawomi-dog.png\" alt=\"Koşan benekli köpek\" width=\"490\" height=\"350\" fetchpriority=\"high\"><img src=\"./pawomi-cat.png\" alt=\"Yün topuyla oynayan kedi\" width=\"420\" height=\"320\"></div><span class=\"hero-bubble\">Mutlu Patiler<br>Güzel Yarınlar ♡</span></div></div></section>";
+ const heroSection=banner.firstElementChild;
+ if(heroSection)main.parentNode.insertBefore(heroSection,main);
+}
 })();
