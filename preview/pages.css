@@ -9,3 +9,35 @@
 @keyframes pw-card-enter{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 .pw-new-product{animation:pw-card-enter .38s ease both}
 @media(prefers-reduced-motion:reduce){.pw-new-product{animation:none}.pw-product>a>img{transition:none}}
+
+
+/* Pawomi product-gallery system */
+.pw-gallery{min-width:0}.pw-gallery-main{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1/1;overflow:hidden;background:#faf1e7;border:0;border-radius:26px;padding:0;cursor:zoom-in}
+.pw-gallery-main img{width:100%;height:100%;object-fit:cover;transition:transform .45s ease}
+.pw-gallery-main:hover img{transform:scale(1.055)}
+.pw-zoom-hint{position:absolute;bottom:18px;right:18px;background:#fffdf5ed;color:#151515;padding:9px 13px;font-weight:800;font-size:13px;border-radius:24px}
+.pw-gallery-thumbs{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;margin-top:14px}
+.pw-gallery-thumb{border:2px solid transparent;border-radius:13px;overflow:hidden;background:#f7eee4;aspect-ratio:1/1;padding:0;transition:transform .2s,border-color .2s}
+.pw-gallery-thumb[aria-pressed="true"]{border-color:#d0061b}.pw-gallery-thumb:hover{transform:translateY(-3px)}
+.pw-gallery-thumb img{display:block;width:100%;height:100%;object-fit:cover}
+.pw-gallery-note{font-size:12px;color:#786d65;line-height:1.5;margin-top:10px}
+.pw-angle-front{object-position:center center!important}
+.pw-angle-left{object-position:35% center!important}
+.pw-angle-right{object-position:65% center!important}
+.pw-angle-close{object-position:center 52%!important;scale:1.18}
+.pw-angle-top{object-position:center 20%!important}
+.pw-lightbox{border:0;border-radius:23px;padding:24px;background:#fff9f0;max-width:min(94vw,900px);max-height:92vh;box-shadow:0 25px 80px #0005;overflow:hidden}
+.pw-lightbox::backdrop{background:#130e0ecc;backdrop-filter:blur(5px)}
+.pw-lightbox>img{display:block;max-width:100%;max-height:78vh;object-fit:contain;margin:auto}
+.pw-lightbox-close{position:absolute;top:12px;right:14px;width:38px;height:38px;border:0;border-radius:50%;background:#c9001c;color:white;font-size:26px;z-index:2}
+.pw-reviews{margin:65px 0 44px}.pw-reviews-heading{display:flex;justify-content:space-between;align-items:end;gap:15px;flex-wrap:wrap}.pw-reviews h2{font-size:clamp(30px,4vw,44px);margin:5px 0 15px}.pw-review-info{color:#786d65;font-size:13px}
+.pw-review-empty{display:flex;align-items:center;gap:18px;background:#fff3e5;border-radius:24px;padding:27px}.pw-review-empty>span{font-size:50px;color:#c9001c}.pw-review-empty h3{font-size:24px;margin:0}.pw-review-empty p{margin:4px 0}
+.pw-story-feature{position:relative;isolation:isolate;overflow:hidden;background:#fff0d9;border-radius:29px;min-height:400px;display:grid;grid-template-columns:38% 34% 28%;padding:48px 50px;margin:28px 0 15px}
+.pw-story-copy{z-index:3;position:relative}.pw-story-copy h2{font-size:clamp(30px,4.1vw,56px);line-height:1.08;margin:0 0 25px}
+.pw-story-hills{position:absolute;bottom:-70px;left:0;width:100%;height:auto;max-width:none;z-index:0;pointer-events:none}
+.pw-story-embrace{position:absolute;bottom:0;left:30%;width:55%;height:98%;object-fit:contain;object-position:center bottom;z-index:2;pointer-events:none;transition:transform .5s}
+.pw-story-feature:hover .pw-story-embrace{transform:scale(1.025)}
+.pw-story-description{grid-column:3;z-index:3;position:relative;font-size:18px;line-height:1.5;align-self:start;margin:5px 0}
+.pw-story-heart{position:absolute;z-index:3;color:#cf0926;font-size:55px;font-weight:800;line-height:1}.pw-heart-one{left:38%;top:10%}.pw-heart-two{right:23%;top:9%}
+@media(max-width:850px){.pw-story-feature{min-height:390px;padding:32px;grid-template-columns:1fr 1fr}.pw-story-description{grid-column:2}.pw-story-embrace{left:20%;width:65%}}
+@media(max-width:550px){.pw-gallery-thumbs{gap:5px}.pw-story-feature{min-height:510px;display:block;padding:25px}.pw-story-copy h2{font-size:34px}.pw-story-embrace{width:100%;height:55%;left:0}.pw-story-description{font-size:14px;max-width:60%;margin-top:18px}.pw-story-hills{bottom:-20px}.pw-heart-one{left:75%;top:15%}.pw-heart-two{display:none}}
